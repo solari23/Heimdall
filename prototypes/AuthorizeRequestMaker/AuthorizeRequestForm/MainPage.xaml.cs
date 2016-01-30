@@ -88,7 +88,7 @@ namespace App1
             const string RequestTemplate = "https://login.microsoftonline.com/common/oauth2/v2.0/authorize?client_id={0}&response_type={1}&redirect_uri={2}&scope={3}&state={4}&nonce={5}{6}";
 
             string appId = string.IsNullOrWhiteSpace(txtAppId.Text)
-                ? "c724ef5a-c459-4b53-be63-7de6e7e3316a"
+                ? "c014c388-5649-4f09-9b51-823bc120c909"
                 : txtAppId.Text;
 
             string responseType = string.IsNullOrWhiteSpace(txtResponseType.Text)

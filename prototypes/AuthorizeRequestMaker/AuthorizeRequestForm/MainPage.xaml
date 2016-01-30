@@ -20,7 +20,7 @@
         <TextBlock x:Name="textBlock_Copy7" HorizontalAlignment="Left" TextWrapping="Wrap" Text="&amp;" VerticalAlignment="Top" Height="29" Width="19" Margin="37,616,0,0" FontSize="18" RenderTransformOrigin="0.737,-0.759"/>
 
         <!-- Input Controls -->
-        <TextBox x:Name="txtAppId" HorizontalAlignment="Left" Margin="32,91,0,0" Text="c724ef5a-c459-4b53-be63-7de6e7e3316a" VerticalAlignment="Top" RenderTransformOrigin="-1.474,0.22" Width="384" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
+        <TextBox x:Name="txtAppId" HorizontalAlignment="Left" Margin="32,91,0,0" Text="c014c388-5649-4f09-9b51-823bc120c909" VerticalAlignment="Top" RenderTransformOrigin="-1.474,0.22" Width="384" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
         <TextBox x:Name="txtResponseType" HorizontalAlignment="Left" Margin="32,192,0,0" Text="id_token" VerticalAlignment="Top" RenderTransformOrigin="-1.474,0.22" Width="384" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
         <TextBox x:Name="txtRedirectUri" HorizontalAlignment="Left" Margin="32,300,0,0" Text="urn:ietf:wg:oauth:2.0:oob" VerticalAlignment="Top" RenderTransformOrigin="-1.474,0.22" Width="384" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
         <TextBox x:Name="txtScopes" HorizontalAlignment="Left" Margin="32,396,0,0" Text="openid+profile+email" VerticalAlignment="Top" RenderTransformOrigin="-1.474,0.22" Width="384" IsTextPredictionEnabled="False" IsSpellCheckEnabled="False"/>
