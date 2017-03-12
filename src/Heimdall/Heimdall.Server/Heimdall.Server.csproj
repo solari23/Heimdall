@@ -41,7 +41,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HeimdallRequest.cs" />
     <Compile Include="HeimdallServer.cs" />
+    <Compile Include="HeimdallServerConfig.cs" />
+    <Compile Include="IHeimdallLogger.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
