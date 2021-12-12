@@ -1,0 +1,8 @@
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <PropertyGroup>
+    <BuildCommitId Condition="'$(BuildCommitId)' == ''">LocalBuild</BuildCommitId>
+    <InformationalVersion>$(BuildCommitId)</InformationalVersion>
+    <Copyright>© Alexandre Kerametlian</Copyright>
+  </PropertyGroup>
+</Project>
