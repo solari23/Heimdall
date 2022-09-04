@@ -15,7 +15,7 @@ public partial class FetchData
     {
         try
         {
-            this.forecasts = await this.Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            this.forecasts = await this.Http.GetFromJsonAsync<WeatherForecast[]>("api/WeatherForecast");
         }
         catch (AccessTokenNotAvailableException exception)
         {

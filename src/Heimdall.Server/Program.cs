@@ -1,3 +1,5 @@
+﻿using Heimdall.Server.Security;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
 
@@ -10,8 +12,14 @@ public static class Program
         var builder = WebApplication.CreateBuilder(args);
 
         // Add services to the container.
-        builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+
+        builder.Services.Configure<UserIdentityServiceOptions>(
+            builder.Configuration.GetSection(nameof(UserIdentityService)));
+        builder.Services.AddSingleton<IUserIdentityService, UserIdentityService>();
+        builder.Services.AddTransient<IClaimsTransformation, HeimdallRolesClaimsTransformation>();
 
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();

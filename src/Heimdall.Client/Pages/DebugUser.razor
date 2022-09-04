@@ -7,74 +7,90 @@
 @attribute [Authorize]
 @using System.Text.Json
 @using System.Security.Claims
+@using Heimdall.Models
+@using Heimdall.Models.Dto
 @using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 @inject IAccessTokenProvider AuthorizationService
 
-<h1>Welcome @AuthenticatedUser?.Identity?.Name</h1>
-
-<h2>Claims for the user</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var claim in AuthenticatedUser?.Claims ?? Array.Empty<Claim>())
-        {
-            <tr>
-                <td>@claim.Type</td>
-                <td class="text-break">@claim.Value</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-
-<h2>Access token for the user</h2>
-<span id="access-token" class="mb-4" style="width:800px; word-wrap:break-word; display:inline-block;">
-    <code>@AccessToken?.Value</code>
-</span>
-
-
-<h2>Access token claims</h2>
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Value</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var claim in GetAccessTokenClaims())
-        {
-            <tr>
-                <td>@claim.Key</td>
-                <td class="text-break">@claim.Value.ToString()</td>
-            </tr>
-        }
-    </tbody>
-</table>
-
-@if (AccessToken != null)
+@if (!DataLoaded)
 {
-    <h2>Access token expires</h2>
-    <p>Current time: <span id="current-time">@DateTimeOffset.Now</span></p>
-    <p id="access-token-expires">@AccessToken.Expires</p>
-
-    <h2>Access token granted scopes (as reported by the API)</h2>
-    @foreach (var scope in AccessToken.GrantedScopes)
+    <div class="spinner-border" role="status"></div>
+}
+else
+{
+    <h1>Welcome @AuthenticatedUser?.Identity?.Name</h1>
+    @if (UserRole != null)
     {
-        <p>Scope: @scope</p>
+        <p>Role: @UserRole</p>
+    }
+
+    <h2>Claims for the user</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in AuthenticatedUser?.Claims ?? Array.Empty<Claim>())
+            {
+                <tr>
+                    <td>@claim.Type</td>
+                    <td class="text-break">@claim.Value</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h2>Access token for the user</h2>
+    <span id="access-token" class="mb-4" style="width:800px; word-wrap:break-word; display:inline-block;">
+        <code>@AccessToken?.Value</code>
+    </span>
+
+    <h2>Access token claims</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var claim in GetAccessTokenClaims())
+            {
+                <tr>
+                    <td>@claim.Key</td>
+                    <td class="text-break">@claim.Value.ToString()</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    @if (AccessToken != null)
+    {
+        <h2>Access token expires</h2>
+        <p>Current time: <span id="current-time">@DateTimeOffset.Now</span></p>
+        <p id="access-token-expires">@AccessToken.Expires</p>
+
+        <h2>Access token granted scopes (as reported by the API)</h2>
+        @foreach (var scope in AccessToken.GrantedScopes)
+        {
+            <p>Scope: @scope</p>
+        }
     }
 }
 
 @code {
     [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
 
+    [Inject] private HttpClient ApiClient { get; set; }
+
+    public bool DataLoaded { get; set; } = false;
+
     public ClaimsPrincipal AuthenticatedUser { get; set; }
     public AccessToken AccessToken { get; set; }
+    public HeimdallRole UserRole { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -87,8 +103,12 @@
         }
 
         AccessToken = token;
-
         AuthenticatedUser = state.User;
+
+        var idInfo = await ApiClient.GetFromJsonAsync<IdentityInfo>("api/Identity");
+        UserRole = idInfo.HeimdallRole;
+
+        DataLoaded = true;
     }
 
     protected IDictionary<string, object> GetAccessTokenClaims()
