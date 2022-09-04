@@ -1,12 +1,10 @@
-using System.Net.Http.Json;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+﻿using System.Net.Http.Json;
 using Heimdall.Models;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Heimdall.Client.Pages;
 
-[Authorize]
 public partial class FetchData
 {
     [Inject]
@@ -17,7 +15,7 @@ public partial class FetchData
     {
         try
         {
-            forecasts = await Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
+            this.forecasts = await this.Http.GetFromJsonAsync<WeatherForecast[]>("WeatherForecast");
         }
         catch (AccessTokenNotAvailableException exception)
         {

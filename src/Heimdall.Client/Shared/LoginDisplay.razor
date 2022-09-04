@@ -6,8 +6,8 @@
 
 <AuthorizeView>
     <Authorized>
-        Hello, @context.User.Identity?.Name!
-        <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+        <div>Hello, <a href="DebugUser" class="m-0 text-reset">@GetFirstName(context)</a>!</div>
+        <button class="btn-sm btn-outline-secondary m-3" @onclick="BeginLogout">Log out</button>
     </Authorized>
     <NotAuthorized>
         <a href="authentication/login">Log in</a>
@@ -15,6 +15,13 @@
 </AuthorizeView>
 
 @code{
+
+    private static string GetFirstName(AuthenticationState context)
+    {
+        string name = context?.User?.Identity?.Name;
+        return name is null ? "you" : name.Split()[0];
+    }
+
     private async Task BeginLogout(MouseEventArgs args)
     {
         await SignOutManager.SetSignOutState();

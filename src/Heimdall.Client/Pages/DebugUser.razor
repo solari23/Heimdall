@@ -1,0 +1,106 @@
+﻿@*
+    Modified from AspNetCore TestAssets:
+    https://github.com/dotnet/aspnetcore/blob/main/src/Components/WebAssembly/testassets/Wasm.Authentication.Client/Pages/User.razor
+*@
+
+@page "/DebugUser"
+@attribute [Authorize]
+@using System.Text.Json
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
+@inject IAccessTokenProvider AuthorizationService
+
+<h1>Welcome @AuthenticatedUser?.Identity?.Name</h1>
+
+<h2>Claims for the user</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in AuthenticatedUser?.Claims ?? Array.Empty<Claim>())
+        {
+            <tr>
+                <td>@claim.Type</td>
+                <td class="text-break">@claim.Value</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<h2>Access token for the user</h2>
+<span id="access-token" class="mb-4" style="width:800px; word-wrap:break-word; display:inline-block;">
+    <code>@AccessToken?.Value</code>
+</span>
+
+
+<h2>Access token claims</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Value</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var claim in GetAccessTokenClaims())
+        {
+            <tr>
+                <td>@claim.Key</td>
+                <td class="text-break">@claim.Value.ToString()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (AccessToken != null)
+{
+    <h2>Access token expires</h2>
+    <p>Current time: <span id="current-time">@DateTimeOffset.Now</span></p>
+    <p id="access-token-expires">@AccessToken.Expires</p>
+
+    <h2>Access token granted scopes (as reported by the API)</h2>
+    @foreach (var scope in AccessToken.GrantedScopes)
+    {
+        <p>Scope: @scope</p>
+    }
+}
+
+@code {
+    [CascadingParameter] private Task<AuthenticationState> AuthenticationState { get; set; }
+
+    public ClaimsPrincipal AuthenticatedUser { get; set; }
+    public AccessToken AccessToken { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        var state = await AuthenticationState;
+        var accessTokenResult = await AuthorizationService.RequestAccessToken();
+        if (!accessTokenResult.TryGetToken(out var token))
+        {
+            throw new InvalidOperationException("Failed to provision the access token.");
+        }
+
+        AccessToken = token;
+
+        AuthenticatedUser = state.User;
+    }
+
+    protected IDictionary<string, object> GetAccessTokenClaims()
+    {
+        if (AccessToken == null)
+        {
+            return new Dictionary<string, object>();
+        }
+
+        // header.payload.signature
+        var payload = AccessToken.Value.Split(".")[1];
+        var base64Payload = payload.Replace('-', '+').Replace('_', '/').PadRight(payload.Length + (4 - payload.Length % 4) % 4, '=');
+        return JsonSerializer.Deserialize<IDictionary<string, object>>(Convert.FromBase64String(base64Payload));
+    }
+}
