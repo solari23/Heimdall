@@ -1,0 +1,22 @@
+[Unit]
+Description=Heimdall Home Web Server
+
+[Service]
+User=heimdall
+WorkingDirectory=/home/heimdall/service
+ExecStart=/bin/dotnet /home/heimdall/service/Heimdall.Server.exe
+
+# Always restart the service after 10 seconds if it crashes.
+# Also restart it every 3 days (to pick up new certs, etc..)
+Restart=always
+RestartSec=10
+RuntimeMaxSec=3d
+
+KillSignal=SIGINT
+SyslogIdentifier=heimdall-svc
+
+Environment=ASPNETCORE_ENVIRONMENT=Production
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+
+[Install]
+WantedBy=multi-user.target

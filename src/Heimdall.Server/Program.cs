@@ -11,6 +11,12 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.WebHost.UseKestrel(o =>
+        {
+            o.Limits.MaxConcurrentConnections = 100;
+            o.Limits.MaxRequestBodySize = 50 * 1024;
+        });
+
         // Add services to the container.
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -21,8 +27,7 @@ public static class Program
         builder.Services.AddSingleton<IUserIdentityService, UserIdentityService>();
         builder.Services.AddTransient<IClaimsTransformation, HeimdallRolesClaimsTransformation>();
 
-        builder.Services.AddControllersWithViews();
-        builder.Services.AddRazorPages();
+        builder.Services.AddControllers();
 
         var app = builder.Build();
 
@@ -43,7 +48,6 @@ public static class Program
         app.UseAuthentication();
         app.UseAuthorization();
 
-        app.MapRazorPages();
         app.MapControllers();
         app.MapFallbackToFile("index.html");
 
