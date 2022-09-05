@@ -12,6 +12,9 @@ useradd --system --create-home heimdall
 mkdir $serviceDir
 # TODO
 
+# Make sure the service has access to 443 port
+sudo setcap CAP_NET_BIND_SERVICE=+eip $serviceDir/Heimdall.Server
+
 # Copy over the new systemd config + start it
 cp heimdall.service /etc/systemd/system/
 systemctl enable heimdall.service

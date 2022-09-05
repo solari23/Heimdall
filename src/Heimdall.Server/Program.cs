@@ -13,7 +13,7 @@ public static class Program
 
         builder.WebHost.UseKestrel(o =>
         {
-            o.Limits.MaxConcurrentConnections = 100;
+            o.Limits.MaxConcurrentConnections = 10_000;
             o.Limits.MaxRequestBodySize = 50 * 1024;
         });
 

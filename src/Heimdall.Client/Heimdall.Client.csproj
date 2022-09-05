@@ -16,4 +16,9 @@
     <ProjectReference Include="..\Heimdall.Models\Heimdall.Models.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Don't trim MSAL while publishing. Causes runtime errors. -->
+    <TrimmerRootAssembly Include="Microsoft.Authentication.WebAssembly.Msal" />
+  </ItemGroup>
+
 </Project>
