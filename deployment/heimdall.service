@@ -4,7 +4,7 @@ Description=Heimdall Home Web Server
 [Service]
 User=heimdall
 WorkingDirectory=/home/heimdall/service
-ExecStart=/bin/dotnet /home/heimdall/service/Heimdall.Server.exe
+ExecStart=/home/heimdall/service/Heimdall.Server
 
 # Always restart the service after 10 seconds if it crashes.
 # Also restart it every 3 days (to pick up new certs, etc..)
@@ -15,8 +15,12 @@ RuntimeMaxSec=3d
 KillSignal=SIGINT
 SyslogIdentifier=heimdall-svc
 
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+
 Environment=ASPNETCORE_ENVIRONMENT=Production
-Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=false
+Environment=ASPNETCORE_URLS=https://home.alker.dev:443;http://home.alker.dev:80
+Environment=SSL_CERTIFICATE_DIRECTORY=/etc/letsencrypt/live/home.alker.dev
+Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=true
 
 [Install]
 WantedBy=multi-user.target

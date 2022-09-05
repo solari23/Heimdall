@@ -1,4 +1,6 @@
-﻿using Heimdall.Server.Security;
+﻿using System.Security.Cryptography.X509Certificates;
+
+using Heimdall.Server.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
@@ -11,10 +13,19 @@ public static class Program
     {
         var builder = WebApplication.CreateBuilder(args);
 
-        builder.WebHost.UseKestrel(o =>
+        builder.WebHost.UseKestrel(kestrelOptions =>
         {
-            o.Limits.MaxConcurrentConnections = 10_000;
-            o.Limits.MaxRequestBodySize = 50 * 1024;
+            kestrelOptions.Limits.MaxConcurrentConnections = 10_000;
+            kestrelOptions.Limits.MaxRequestBodySize = 50 * 1024;
+
+            var sslCert = GetServerSslCertificate();
+            if (sslCert != null)
+            {
+                kestrelOptions.ConfigureHttpsDefaults(httpsOptions =>
+                {
+                    httpsOptions.ServerCertificate = sslCert;
+                });
+            }
         });
 
         // Add services to the container.
@@ -52,5 +63,32 @@ public static class Program
         app.MapFallbackToFile("index.html");
 
         app.Run();
+    }
+
+    /// <summary>
+    /// Checks environment variable SSL_CERTIFICATE_DIRECTORY to see if an SSL cert
+    /// is configured. If so, loads the certificate from files:
+    ///   - Cert file called 'fullchain.pem'
+    ///   - Private key from 'privkey.pem'
+    ///
+    /// Returns null if the setting isn't set (server should use default cert).
+    /// </summary>
+    private static X509Certificate2 GetServerSslCertificate()
+    {
+        const string CertDirEnvVar = "SSL_CERTIFICATE_DIRECTORY";
+        var certDir = Environment.GetEnvironmentVariable(CertDirEnvVar);
+
+        if (string.IsNullOrWhiteSpace(certDir))
+        {
+            Console.WriteLine(
+                $"No SSL cert directory configured in environment var {CertDirEnvVar}. Server will load default.");
+            return null;
+        }
+
+        Console.WriteLine($"Loading certificate from directory '{certDir}'");
+
+        return X509Certificate2.CreateFromPemFile(
+            Path.Join(certDir, "fullchain.pem"),
+            Path.Join(certDir, "privkey.pem"));
     }
 }
