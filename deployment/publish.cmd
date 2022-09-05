@@ -11,7 +11,13 @@ echo Copying to staging directory on HomePi..
 scp -r out/* pi@homepi.local:/home/pi/staging/heimdall/
 
 echo Done publishing!
-echo To deploy the service, ssh to HomePi and run deploy.sh
-echo "cd ~/staging/heimdall && chmod +x deploy.sh && sudo ./deploy.sh"
 
+choice /M "Deploy service?"
+IF ERRORLEVEL ==2 GOTO END
+
+echo Deploying the service on HomePi..
+ssh pi@homepi.local "cd ~/staging/heimdall && chmod +x deploy.sh && sudo ./deploy.sh --delete-staging"
+echo Deployment complete!
+
+:END
 popd

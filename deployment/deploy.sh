@@ -19,14 +19,6 @@ cp -r . $serviceDir
 chmod +x $serviceDir/Heimdall.Server
 chown -R heimdall:heimdall $serviceDir
 
-read -p "Clear systemctl logs? " -n 1 -r
-echo # newline
-if [[ $REPLY =~ ^[Yy]$ ]]
-then
-    journalctl --rotate
-    journalctl --vacuum-time=1
-fi
-
 # Copy over the new systemd config + start it
 cp heimdall.service /etc/systemd/system/
 systemctl daemon-reload
@@ -36,10 +28,9 @@ systemctl start heimdall.service
 # TODO: probe check here
 # sleep 10
 
-read -p "Clean up staging directory? " -n 1 -r
-echo # newline
-if [[ $REPLY =~ ^[Yy]$ ]]
+if [[ $1 == "--delete-staging" ]]
 then
+    echo "Deleting the staging directory contents"
     rm -rf *
 fi
 
