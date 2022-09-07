@@ -13,7 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Heimdall.Models\Heimdall.Models.csproj" />
+    <ProjectReference Include="..\Models\Heimdall.Models.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -2,11 +2,13 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 16.0.0.0
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Server", "Heimdall.Server\Heimdall.Server.csproj", "{07BA7126-20F9-4E2C-B8DB-A54584751770}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Server", "Server\Heimdall.Server.csproj", "{07BA7126-20F9-4E2C-B8DB-A54584751770}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Client", "Heimdall.Client\Heimdall.Client.csproj", "{EF39311A-E6CE-4A57-8622-D4CE5C6082C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Client", "Client\Heimdall.Client.csproj", "{EF39311A-E6CE-4A57-8622-D4CE5C6082C4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Models", "Heimdall.Models\Heimdall.Models.csproj", "{D1177993-653D-4532-9921-AC80C43E124C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Models", "Models\Heimdall.Models.csproj", "{D1177993-653D-4532-9921-AC80C43E124C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heimdall.Integrations.Shelly", "Integrations\Shelly\Heimdall.Integrations.Shelly.csproj", "{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,6 +56,18 @@ Global
 		{D1177993-653D-4532-9921-AC80C43E124C}.Release|x64.Build.0 = Release|Any CPU
 		{D1177993-653D-4532-9921-AC80C43E124C}.Release|x86.ActiveCfg = Release|Any CPU
 		{D1177993-653D-4532-9921-AC80C43E124C}.Release|x86.Build.0 = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|x64.Build.0 = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Debug|x86.Build.0 = Debug|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|Any CPU.Build.0 = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|x64.ActiveCfg = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|x64.Build.0 = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|x86.ActiveCfg = Release|Any CPU
+		{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
