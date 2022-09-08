@@ -32,6 +32,7 @@ public static class Program
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+        builder.Services.AddHeimdallRoleAuthorization();
 
         builder.Services.Configure<UserIdentityServiceOptions>(
             builder.Configuration.GetSection(nameof(UserIdentityService)));

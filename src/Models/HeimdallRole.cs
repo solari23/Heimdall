@@ -9,20 +9,23 @@ public class HeimdallRole
 
     public const string ClaimType = "HeimdallRole";
 
-    public static readonly HeimdallRole UberAdmin = new ("Heimdall-UberAdmin", 100);
+    public const string UberAdmin = "Heimdall-UberAdmin";
+    public static readonly HeimdallRole UberAdminRole = new (UberAdmin, 100);
 
-    public static readonly HeimdallRole HomeAdmin = new ("Heimdall-HomeAdmin", 70);
+    public const string HomeAdmin = "Heimdall-HomeAdmin";
+    public static readonly HeimdallRole HomeAdminRole = new (HomeAdmin, 70);
 
-    public static readonly HeimdallRole HomeViewer = new ("Heimdall-HomeViewer", 10);
+    public const string HomeViewer = "Heimdall-HomeViewer";
+    public static readonly HeimdallRole HomeViewerRole = new (HomeViewer, 10);
 
     public static readonly HeimdallRole NoRole = new ("NoRole", 0);
 
     private static readonly IReadOnlyDictionary<string, HeimdallRole> RoleMap
         = new Dictionary<string, HeimdallRole>(StringComparer.OrdinalIgnoreCase)
         {
-            { UberAdmin.Name, UberAdmin },
-            { HomeAdmin.Name, HomeAdmin },
-            { HomeViewer.Name, HomeViewer },
+            { UberAdminRole.Name, UberAdminRole },
+            { HomeAdminRole.Name, HomeAdminRole },
+            { HomeViewerRole.Name, HomeViewerRole },
             { NoRole.Name, NoRole },
         };
 
