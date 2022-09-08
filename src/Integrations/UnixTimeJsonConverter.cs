@@ -4,7 +4,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Heimdall.Integrations.Shelly.Messages;
+namespace Heimdall.Integrations;
 
 public sealed class UnixTimeJsonConverter : JsonConverter<DateTimeOffset>
 {
