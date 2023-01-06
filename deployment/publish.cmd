@@ -3,7 +3,7 @@
 pushd %~dp0..
 
 echo Building..
-dotnet publish -c Retail --runtime linux-arm64 --self-contained -o .\out src\Heimdall.Server\Heimdall.Server.csproj
+dotnet publish -c Retail --runtime linux-arm64 --self-contained -o .\out src\Server\Heimdall.Server.csproj
 copy deployment\heimdall.service out
 copy deployment\deploy.sh out
 
