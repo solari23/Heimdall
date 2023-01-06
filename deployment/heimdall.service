@@ -20,7 +20,7 @@ SyslogIdentifier=heimdall-svc
 AmbientCapabilities=CAP_NET_BIND_SERVICE
 
 Environment=ASPNETCORE_ENVIRONMENT=Production
-Environment=ASPNETCORE_URLS=https://<URI>:443
+Environment=ASPNETCORE_URLS=https://home.alker.dev:443
 Environment=SSL_CERTIFICATE_DIRECTORY=/etc/letsencrypt/live/home.alker.dev
 Environment=DOTNET_PRINT_TELEMETRY_MESSAGE=true
 
