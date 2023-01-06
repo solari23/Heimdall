@@ -12,8 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Client\Heimdall.Client.csproj" />
     <ProjectReference Include="..\Models\Heimdall.Models.csproj" />
+    <ProjectReference Include="..\Web\Heimdall.Web.csproj" />
   </ItemGroup>
 
   <ItemGroup>

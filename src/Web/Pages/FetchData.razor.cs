@@ -3,7 +3,7 @@ using Heimdall.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
-namespace Heimdall.Client.Pages;
+namespace Heimdall.Web.Pages;
 
 public partial class FetchData
 {
