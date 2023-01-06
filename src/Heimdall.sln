@@ -4,11 +4,11 @@ VisualStudioVersion = 17.0.31919.166
 MinimumVisualStudioVersion = 16.0.0.0
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Server", "Server\Heimdall.Server.csproj", "{07BA7126-20F9-4E2C-B8DB-A54584751770}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Client", "Client\Heimdall.Client.csproj", "{EF39311A-E6CE-4A57-8622-D4CE5C6082C4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Web", "Web\Heimdall.Web.csproj", "{EF39311A-E6CE-4A57-8622-D4CE5C6082C4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Models", "Models\Heimdall.Models.csproj", "{D1177993-653D-4532-9921-AC80C43E124C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Heimdall.Integrations", "Integrations\Heimdall.Integrations.csproj", "{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Integrations", "Integrations\Heimdall.Integrations.csproj", "{78B1D8E9-B8DA-47AA-A8B7-C79FA0BB0645}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

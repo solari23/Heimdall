@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "Heimdall.Client": {
+    "Heimdall.Web": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {

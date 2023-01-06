@@ -1,4 +1,4 @@
-﻿namespace Heimdall.Client.Shared
+﻿namespace Heimdall.Web.Shared
 {
     public partial class NavMenu
     {
