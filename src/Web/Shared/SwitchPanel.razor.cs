@@ -1,5 +1,7 @@
-﻿using Heimdall.Models.Dto;
+﻿using System.Net.Http.Json;
+using Heimdall.Models.Dto;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Heimdall.Web.Shared;
 
@@ -12,28 +14,14 @@ public partial class SwitchPanel
 
     protected override async Task OnInitializedAsync()
     {
-        await Task.Delay(1500);
-        this.switches = new List<SwitchInfo>
+        try
         {
-            new SwitchInfo
-            {
-                Id = "FOOBAZ_1",
-                Label = "The best switch ever",
-                State = SwitchState.Unknown,
-            },
-            new SwitchInfo
-            {
-                Id = "FOOBAZ_2",
-                Label = "This one is on",
-                State = SwitchState.Unknown,
-            },
-            new SwitchInfo
-            {
-                Id = "FOOBAZ_3",
-                Label = "This one is off",
-                State = SwitchState.Unknown,
-            },
-        };
+            this.switches = await this.Http.GetFromJsonAsync<List<SwitchInfo>>("api/devices/switch/ListAll");
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
 
         await base.OnInitializedAsync();
     }
