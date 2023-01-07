@@ -1,0 +1,29 @@
+﻿@using Heimdall.Models.Dto
+
+<div class="form-check form-switch">
+    @if (!this.LoadAttempted)
+    {
+        <div class="spinner-border spinner-border-sm me-4" style="margin-left:-40px" role="status"></div>
+    }
+    else
+    {
+        <input class="form-check-input"
+           type="checkbox" 
+           role="checkbox" 
+           id="@("SWITCH_" + Switch.Id)"
+           checked=@(Switch.State == SwitchState.On)
+           disabled=@(Switch.State == SwitchState.Unknown)/>
+    }
+
+    <label class="form-check-label" for="@("SWITCH_" + Switch.Id)">@Switch.Label</label>
+</div>
+
+
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public SwitchInfo Switch { get; set; }
+
+    private bool LoadAttempted { get; set; } = false;
+}
