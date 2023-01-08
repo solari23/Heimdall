@@ -3,6 +3,7 @@
 
 using Heimdall.Models;
 using Heimdall.Models.Dto;
+using Heimdall.Models.Requests;
 using Heimdall.Server.Security;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
@@ -14,7 +15,7 @@ namespace Heimdall.Server.Controllers.Devices;
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class SwitchController : Controller
 {
-    private static List<SwitchInfo> Switches => new List<SwitchInfo>
+    private static List<SwitchInfo> Switches => new()
     {
         new SwitchInfo
         {
@@ -36,11 +37,18 @@ public class SwitchController : Controller
         },
     };
 
+    private static readonly Dictionary<string, SwitchState> CurrentStates = new()
+    {
+        { "FOOBAZ_1", SwitchState.Unknown },
+        { "FOOBAZ_2", SwitchState.On },
+        { "FOOBAZ_3", SwitchState.Off },
+    };
+
     [HttpGet("ListAll")]
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> ListAllAsync()
     {
-        await Task.Delay(1500);
+        await Task.Delay(700);
         return this.Ok(Switches);
     }
 
@@ -48,26 +56,49 @@ public class SwitchController : Controller
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> GetAsync(string switchId)
     {
-        var switchInfo = Switches.FirstOrDefault(s => s.Id == switchId);
-
-        if (switchInfo is null)
-        {
-            return this.NotFound();
-        }
-
-        await Task.Delay(1000);
-
+        await Task.Delay(400);
         if (switchId == "FOOBAZ_2")
         {
             await Task.Delay(500);
-            switchInfo.State = SwitchState.On;
         }
         else if (switchId == "FOOBAZ_3")
         {
             await Task.Delay(200);
-            switchInfo.State = SwitchState.Off;
         }
 
+        var switchInfo = Switches.FirstOrDefault(s => s.Id == switchId);
+
+        if (switchInfo is null
+            || !CurrentStates.TryGetValue(switchId, out var currentState))
+        {
+            return this.NotFound();
+        }
+
+        switchInfo.State = currentState;
+
         return this.Ok(switchInfo);
+    }
+
+    [HttpPost("SetState/{switchId}")]
+    [HeimdallRoleAuthorize(HeimdallRole.HomeAdmin)]
+    public async Task<IActionResult> SetStateAsync(
+        string switchId,
+        [FromBody]SetSwitchStateRequest request)
+    {
+        await Task.Delay(200);
+
+        if (request.State == SwitchState.Unknown)
+        {
+            // TODO: Define and send standard error response.
+            return this.BadRequest();
+        }
+
+        if (!CurrentStates.ContainsKey(switchId))
+        {
+            return this.NotFound();
+        }
+
+        CurrentStates[switchId] = request.State;
+        return this.Ok();
     }
 }
