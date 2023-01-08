@@ -1,6 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 
 using Heimdall.Server.Security;
+using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Identity.Web;
@@ -38,6 +39,10 @@ public static class Program
             builder.Configuration.GetSection(nameof(UserIdentityService)));
         builder.Services.AddSingleton<IUserIdentityService, UserIdentityService>();
         builder.Services.AddTransient<IClaimsTransformation, HeimdallRolesClaimsTransformation>();
+
+        builder.Services.Configure<SqliteStorageAccessOptions>(
+            builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
+        builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
 
         builder.Services.AddControllers();
 

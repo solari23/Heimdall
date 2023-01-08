@@ -3,6 +3,7 @@
 pushd `dirname $0`
 
 serviceDir=/home/heimdall/service
+storageDir=/home/heimdall/storage
 
 # Stop existing service (will fail if it doesn't exist)
 systemctl stop heimdall.service
@@ -10,6 +11,10 @@ systemctl disable heimdall.service
 
 # Create the service account (will just fail if it exists)
 useradd --system --create-home heimdall
+
+# Create storage directory (will do nothing if it exists)
+mkdir -p $storageDir
+chown -R heimdall:heimdall $storageDir
 
 # Copy over the service binaries
 rm -rf $serviceDir
