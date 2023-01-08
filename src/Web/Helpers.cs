@@ -33,4 +33,17 @@ public static class Helpers
 
         return false;
     }
+
+    public static bool HasDeviceAdminAccess(this ClaimsPrincipal principal)
+    {
+        var heimdallRoleClaim = principal.FindFirst(HeimdallRole.ClaimType);
+
+        if (heimdallRoleClaim is not null)
+        {
+            HeimdallRole role = heimdallRoleClaim.Value;
+            return role.Satisfies(HeimdallRole.UberAdminRole);
+        }
+
+        return false;
+    }
 }
