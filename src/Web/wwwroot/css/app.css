@@ -35,6 +35,12 @@ a, .btn-link {
     color: red;
 }
 
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

@@ -1,0 +1,32 @@
+﻿@using Heimdall.Models;
+
+@if (this.devices is null)
+{
+    <div class="spinner-border" role="status"></div>
+}
+else
+{
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Name</th>
+                <th scope="col" class="fit">Host or IP</th>
+                <th scope="col" class="fit"><!-- Empty --></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var device in this.devices)
+            {
+                <tr>
+                    <td>
+                        <span class="oi @(DeviceTypeToIconClass(device.Type))" aria-hidden="true"></span> @(EnumUtil<DeviceType>.ToPrettyString(device.Type))
+                    </td>
+                    <td>@device.Name</td>
+                    <td>@device.HostOrIPAddress</td>
+                    <td><button type="button" class="btn btn-outline-secondary oi oi-trash" aria-label="delete" /></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
