@@ -105,7 +105,9 @@ else
         AccessToken = token;
         AuthenticatedUser = state.User;
 
-        var idInfo = await ApiClient.GetFromJsonAsync<IdentityInfo>("api/Identity");
+        var idInfo = await ApiClient.GetFromJsonAsync<IdentityInfo>(
+            "api/Identity",
+            options: Helpers.DefaultJsonOptions);
         UserRole = idInfo.HeimdallRole;
 
         DataLoaded = true;

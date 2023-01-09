@@ -53,17 +53,6 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
         return connection;
     }
 
-    // Placeholder
-    public async Task DoThingAsync()
-    {
-        var foo = this.Connection.Value.ServerVersion;
-        foo.ToString();
-
-        var bar = await this.GetDevicesAsync(DeviceType.ShellySwitch, DeviceType.Unknown);
-
-        // return Task.CompletedTask;
-    }
-
     public Task<List<Device>> GetDevicesAsync(params DeviceType[] typeFilter)
         => this.GetDevicesAsync(default, typeFilter);
 
@@ -106,17 +95,7 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
         return devices;
     }
 
-    public async Task DeleteDeviceAsync(string deviceId, CancellationToken ct = default)
-    {
-        var command = this.Connection.Value.CreateCommand();
-        command.CommandText = DeviceDeletionCommand;
-
-        command.Parameters.AddWithValue($"${nameof(Device.Id)}", deviceId);
-
-        await command.ExecuteNonQueryAsync();
-    }
-
-    public async Task AddDeviceAsync(Device device, CancellationToken ct = default)
+    public async Task AddDeviceAsync(Device device)
     {
         var command = this.Connection.Value.CreateCommand();
         command.CommandText = DeviceCreationCommand;
@@ -125,6 +104,16 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
         command.Parameters.AddWithValue($"${nameof(Device.Type)}", device.Type.ToString());
         command.Parameters.AddWithValue($"${nameof(Device.Name)}", device.Name);
         command.Parameters.AddWithValue($"${nameof(Device.HostOrIPAddress)}", device.HostOrIPAddress);
+
+        await command.ExecuteNonQueryAsync();
+    }
+
+    public async Task DeleteDeviceAsync(string deviceId)
+    {
+        var command = this.Connection.Value.CreateCommand();
+        command.CommandText = DeviceDeletionCommand;
+
+        command.Parameters.AddWithValue($"${nameof(Device.Id)}", deviceId);
 
         await command.ExecuteNonQueryAsync();
     }

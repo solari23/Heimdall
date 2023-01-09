@@ -16,7 +16,9 @@ public partial class SwitchPanel
     {
         try
         {
-            this.switches = await this.Http.GetFromJsonAsync<List<SwitchInfo>>("api/devices/switch/ListAll");
+            this.switches = await this.Http.GetFromJsonAsync<List<SwitchInfo>>(
+                "api/devices/switch/ListAll",
+                options: Helpers.DefaultJsonOptions);
         }
         catch (AccessTokenNotAvailableException exception)
         {

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Net.Http.Json;
+using Heimdall.Models;
+using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
 namespace Heimdall.Web.Pages;
@@ -9,11 +11,35 @@ public partial class DeviceAdmin
     private HttpClient Http { get; set; }
 
     // Placeholder
-    public async Task DoThingAsync()
+    public async Task ListDevicesAsync()
     {
         try
         {
-            await this.Http.GetAsync("api/devices/admin/dothing");
+            var devices = await this.Http.GetFromJsonAsync<List<Device>>(
+                "api/devices/admin",
+                options: Helpers.DefaultJsonOptions);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    public async Task CreateDeviceAsync()
+    {
+        try
+        {
+            var newDevice = new Device
+            {
+                Type = DeviceType.ShellySwitch,
+                Name = "Fake Device " + Guid.NewGuid().ToString().Split('-')[0],
+                HostOrIPAddress = "127.0.0.1",
+            };
+
+            await this.Http.PostAsJsonAsync<Device>(
+                $"api/devices/admin",
+                newDevice,
+                options: Helpers.DefaultJsonOptions);
         }
         catch (AccessTokenNotAvailableException exception)
         {

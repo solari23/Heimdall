@@ -22,12 +22,31 @@ public class DeviceAdminController : Controller
 
     private IStorageAccess StorageAccess { get; }
 
-    // Placeholder
-    [HttpGet("DoThing")]
-    [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
-    public async Task<IActionResult> DoThingAsync()
+    [HttpGet]
+    public async Task<IActionResult> ListAllAsync(CancellationToken ct)
     {
-        await this.StorageAccess.DoThingAsync();
+        var devices = await this.StorageAccess.GetDevicesAsync(ct);
+        return this.Ok(devices);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> CreateAsync([FromBody]Device newDeviceRequest)
+    {
+        // Ignore device ID coming from client, which should be empty.
+        // We'll generate a new unique ID.
+        var newDevice = newDeviceRequest with { Id = IdGenerator.CreateNewId() };
+
+        await this.StorageAccess.AddDeviceAsync(newDevice);
+
+        // Technically this should return HTTP 201 'Created' with a URI to the resource.
+        // We aren't fully implementing REST resources here, though.
+        return this.Ok(newDevice);
+    }
+
+    [HttpDelete("{deviceId}")]
+    public async Task<IActionResult> DeleteAsync(string deviceId)
+    {
+        await this.StorageAccess.DeleteDeviceAsync(deviceId);
         return this.Ok();
     }
 }

@@ -1,5 +1,5 @@
 ﻿using System.Security.Cryptography.X509Certificates;
-
+using System.Text.Json.Serialization;
 using Heimdall.Server.Security;
 using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authentication;
@@ -44,7 +44,11 @@ public static class Program
             builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
         builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
 
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         var app = builder.Build();
 

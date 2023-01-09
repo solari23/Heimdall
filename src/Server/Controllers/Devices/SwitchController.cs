@@ -79,7 +79,7 @@ public class SwitchController : Controller
         return this.Ok(switchInfo);
     }
 
-    [HttpPost("SetState/{switchId}")]
+    [HttpPost("{switchId}/SetState")]
     [HeimdallRoleAuthorize(HeimdallRole.HomeAdmin)]
     public async Task<IActionResult> SetStateAsync(
         string switchId,

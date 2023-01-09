@@ -7,14 +7,11 @@ namespace Heimdall.Server.Storage;
 
 public interface IStorageAccess
 {
-    // Placeholder
-    Task DoThingAsync();
-
     Task<List<Device>> GetDevicesAsync(params DeviceType[] typeFilter);
 
     Task<List<Device>> GetDevicesAsync(CancellationToken ct, params DeviceType[] typeFilter);
 
-    Task DeleteDeviceAsync(string deviceId, CancellationToken ct = default);
+    Task AddDeviceAsync(Device device);
 
-    Task AddDeviceAsync(Device device, CancellationToken ct = default);
+    Task DeleteDeviceAsync(string deviceId);
 }

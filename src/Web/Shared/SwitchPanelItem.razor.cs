@@ -16,7 +16,8 @@ public partial class SwitchPanelItem
         try
         {
             this.Switch = await this.Http.GetFromJsonAsync<SwitchInfo>(
-                $"api/devices/switch/{this.Switch.Id}");
+                $"api/devices/switch/{this.Switch.Id}",
+                options: Helpers.DefaultJsonOptions);
             this.LoadAttempted = true;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -35,11 +36,12 @@ public partial class SwitchPanelItem
         try
         {
             var response = await this.Http.PostAsJsonAsync<SetSwitchStateRequest>(
-                $"api/devices/switch/setstate/{this.Switch.Id}",
+                $"api/devices/switch/{this.Switch.Id}/setstate",
                 new SetSwitchStateRequest
                 {
                     State = newState,
-                });
+                },
+                options: Helpers.DefaultJsonOptions);
             response.EnsureSuccessStatusCode();
             this.Switch.State = newState;
         }
