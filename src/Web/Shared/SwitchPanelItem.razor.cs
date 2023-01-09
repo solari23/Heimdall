@@ -16,7 +16,7 @@ public partial class SwitchPanelItem
         try
         {
             this.Switch = await this.Http.GetFromJsonAsync<SwitchInfo>(
-                $"api/devices/switch/{this.Switch.Id}",
+                $"api/devices/switches/{this.Switch.Id}",
                 options: Helpers.DefaultJsonOptions);
             this.LoadAttempted = true;
         }
@@ -36,7 +36,7 @@ public partial class SwitchPanelItem
         try
         {
             var response = await this.Http.PostAsJsonAsync<SetSwitchStateRequest>(
-                $"api/devices/switch/{this.Switch.Id}/setstate",
+                $"api/devices/switches/{this.Switch.Id}/setstate",
                 new SetSwitchStateRequest
                 {
                     State = newState,

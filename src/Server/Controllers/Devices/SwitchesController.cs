@@ -13,7 +13,7 @@ namespace Heimdall.Server.Controllers.Devices;
 [ApiController]
 [Route("api/devices/[controller]")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
-public class SwitchController : Controller
+public class SwitchesController : Controller
 {
     private static List<SwitchInfo> Switches => new()
     {
@@ -44,7 +44,7 @@ public class SwitchController : Controller
         { "FOOBAZ_3", SwitchState.Off },
     };
 
-    [HttpGet("ListAll")]
+    [HttpGet]
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> ListAllAsync()
     {

@@ -7,15 +7,15 @@ using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
-namespace Heimdall.Server.Controllers.Devices;
+namespace Heimdall.Server.Controllers.Admin;
 
 [ApiController]
-[Route("api/devices/admin")]
+[Route("api/admin/devices")]
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 [HeimdallRoleAuthorize(HeimdallRole.UberAdmin)]
-public class DeviceAdminController : Controller
+public class DevicesAdminController : Controller
 {
-    public DeviceAdminController(IStorageAccess storageAccess)
+    public DevicesAdminController(IStorageAccess storageAccess)
     {
         this.StorageAccess = storageAccess;
     }

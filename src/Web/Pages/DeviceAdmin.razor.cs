@@ -16,7 +16,7 @@ public partial class DeviceAdmin
         try
         {
             var devices = await this.Http.GetFromJsonAsync<List<Device>>(
-                "api/devices/admin",
+                "api/admin/devices",
                 options: Helpers.DefaultJsonOptions);
         }
         catch (AccessTokenNotAvailableException exception)
@@ -37,7 +37,7 @@ public partial class DeviceAdmin
             };
 
             await this.Http.PostAsJsonAsync<Device>(
-                $"api/devices/admin",
+                $"api/admin/devices",
                 newDevice,
                 options: Helpers.DefaultJsonOptions);
         }
