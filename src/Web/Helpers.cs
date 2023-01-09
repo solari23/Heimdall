@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using Heimdall.Models;
+using Microsoft.JSInterop;
 
 namespace Heimdall.Web;
 
@@ -50,6 +51,9 @@ public static class Helpers
 
         return false;
     }
+
+    public static ValueTask<bool> ConfirmAsync(this IJSRuntime jsRuntime, string prompt)
+        => jsRuntime.InvokeAsync<bool>("confirm", prompt);
 
     private static JsonSerializerOptions CreateDefaultJsonOptions()
     {

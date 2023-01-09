@@ -24,7 +24,12 @@ else
                     </td>
                     <td>@device.Name</td>
                     <td>@device.HostOrIPAddress</td>
-                    <td><button type="button" class="btn btn-outline-secondary oi oi-trash" aria-label="delete" /></td>
+                    <td>
+                        <button type="button" 
+                                class="btn btn-outline-secondary oi oi-trash"
+                                aria-label="delete"
+                                @onclick=@(async () => await this.ConfirmAndDeleteDeviceAsync(device)) />
+                    </td>
                 </tr>
             }
         </tbody>

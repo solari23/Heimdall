@@ -2,6 +2,7 @@
 using Heimdall.Models;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using Microsoft.JSInterop;
 
 namespace Heimdall.Web.Shared;
 
@@ -9,6 +10,9 @@ public partial class DeviceTable
 {
     [Inject]
     private HttpClient Http { get; set; }
+
+    [Inject]
+    private IJSRuntime JSRuntime { get; set; }
 
     private List<Device> devices;
 
@@ -19,6 +23,27 @@ public partial class DeviceTable
             this.devices = await this.Http.GetFromJsonAsync<List<Device>>(
                 "api/admin/devices",
                 options: Helpers.DefaultJsonOptions);
+        }
+        catch (AccessTokenNotAvailableException exception)
+        {
+            exception.Redirect();
+        }
+    }
+
+    private async Task ConfirmAndDeleteDeviceAsync(Device deviceToDelete)
+    {
+        var promptString = $"Are you sure you want to delete {EnumUtil<DeviceType>.ToPrettyString(deviceToDelete.Type)} '{deviceToDelete.Name}'?";
+        if (!await this.JSRuntime.ConfirmAsync(promptString))
+        {
+            // Confirmation cancelled.
+            return;
+        }
+
+        try
+        {
+            var response = await this.Http.DeleteAsync($"api/admin/devices/{deviceToDelete.Id}");
+            response.EnsureSuccessStatusCode();
+            this.devices.RemoveAll(d => d.Id == deviceToDelete.Id);
         }
         catch (AccessTokenNotAvailableException exception)
         {
