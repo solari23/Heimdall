@@ -88,20 +88,29 @@ public class SwitchesController : Controller
         string switchId,
         [FromBody]SetSwitchStateRequest request)
     {
-        await Task.Delay(200);
-
-        if (request.State == SwitchState.Unknown)
-        {
-            // TODO: Define and send standard error response.
-            return this.BadRequest();
-        }
-
         var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
 
         if (!queryResult.WasFound)
         {
             // TODO: Define and send standard error response.
             return this.NotFound();
+        }
+
+        var switchController = this.DeviceControllerFactory.GetSwitchController(queryResult.Data);
+
+        switch (request.State)
+        {
+            case SwitchState.On:
+                await switchController.TurnOnAsync();
+                break;
+
+            case SwitchState.Off:
+                await switchController.TurnOffAsync();
+                break;
+
+            default:
+                // TODO: Define and send standard error response.
+                return this.BadRequest();
         }
 
         return this.Ok();
