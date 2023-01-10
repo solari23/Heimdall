@@ -7,14 +7,14 @@ namespace Heimdall.Models;
 
 public record Device
 {
-    public string Id { get; init; }
+    public string Id { get; set; }
 
     [Required]
-    public DeviceType Type { get; init; }
+    public DeviceType Type { get; set; }
 
     [Required]
-    public string Name { get; init; }
+    public string Name { get; set; }
 
     [Required]
-    public string HostOrIPAddress { get; init; }
+    public string HostOrIPAddress { get; set; }
 }

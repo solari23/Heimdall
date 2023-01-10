@@ -1,4 +1,5 @@
 ﻿@page "/deviceadmin"
+@using Heimdall.Models
 
 <h1 class="mb-4">Manage Devices</h1>
 
@@ -27,7 +28,11 @@
             </div>
         </div>
 
-        <NewDeviceModalForm @ref="NewDeviceModal"
-                            AsyncSaveDelegate="this.CreateDeviceAsync" />
+        <FormModal @ref="NewDeviceModal"
+                   TModel="Device"
+                   FormTitle="New Device"
+                   AsyncSaveDelegate="this.CreateDeviceAsync">
+            <p>Hello World</p>
+        </FormModal>
     }
 </AuthorizeView>

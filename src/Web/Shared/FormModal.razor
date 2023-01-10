@@ -1,21 +1,21 @@
-﻿@using Heimdall.Models
+﻿@typeparam TModel
 
 <div class="modal fade @(this.isOpen ? "show" : "")"
-     id="newDeviceFormModal"
+     id="formModal"
      tabindex="-1"
      aria-hidden="true"
      style="display: @(this.isOpen ? "block" : "none")">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">New Device</h5>
+        <h5 class="modal-title">@this.FormTitle</h5>
         <button type="button"
                 class="btn-close" 
                 aria-label="Close"
                 @onclick="this.Close"/>
       </div>
       <div class="modal-body">
-        <p>Hello World</p>
+        @ChildContent
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" @onclick="this.Close">Cancel</button>
@@ -32,7 +32,13 @@
 
 @code {
     [Parameter]
-    public Func<Device, Task> AsyncSaveDelegate { get; set; }
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public string FormTitle { get; set; }
+
+    [Parameter]
+    public Func<TModel, Task> AsyncSaveDelegate { get; set; }
 
     private bool isOpen = false;
 

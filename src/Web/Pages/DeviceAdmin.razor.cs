@@ -11,7 +11,7 @@ public partial class DeviceAdmin
     [Inject]
     private HttpClient Http { get; set; }
 
-    private NewDeviceModalForm NewDeviceModal { get; set; }
+    private FormModal<Device> NewDeviceModal { get; set; }
 
     // Placeholder
     public async Task ListDevicesAsync()
