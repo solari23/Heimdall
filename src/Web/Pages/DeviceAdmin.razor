@@ -22,9 +22,12 @@
                     <button class="btn btn-primary" id="B1" @onclick="ListDevicesAsync">List</button>
                 </div>
                 <div class="col-1">
-                    <button class="btn btn-primary" id="B2" @onclick="CreateDeviceAsync">Create</button>
+                    <button class="btn btn-primary" id="B2">Create</button>
                 </div>
             </div>
         </div>
+
+        <NewDeviceModalForm @ref="NewDeviceModal"
+                            AsyncSaveDelegate="this.CreateDeviceAsync" />
     }
 </AuthorizeView>

@@ -1,0 +1,57 @@
+﻿@using Heimdall.Models
+
+<div class="modal fade @(this.isOpen ? "show" : "")"
+     id="newDeviceFormModal"
+     tabindex="-1"
+     aria-hidden="true"
+     style="display: @(this.isOpen ? "block" : "none")">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">New Device</h5>
+        <button type="button"
+                class="btn-close" 
+                aria-label="Close"
+                @onclick="this.Close"/>
+      </div>
+      <div class="modal-body">
+        <p>Hello World</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" @onclick="this.Close">Cancel</button>
+        <button type="button" class="btn btn-primary" @onclick="async () => await this.SaveAndCloseAsync()">Save</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+@if (this.isOpen)
+{
+    <div class="modal-backdrop fade show"></div>
+}
+
+@code {
+    [Parameter]
+    public Func<Device, Task> AsyncSaveDelegate { get; set; }
+
+    private bool isOpen = false;
+
+    public void Open()
+    {
+        this.isOpen = true;
+        this.StateHasChanged();
+    }
+
+    public void Close()
+    {
+        this.isOpen = false;
+        this.StateHasChanged();
+    }
+
+    private async Task SaveAndCloseAsync()
+    {
+        // TODO: Ensure form is valid, and then call the delegate.
+        await Task.Yield();
+        this.Close();
+    }
+}

@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Heimdall.Models;
+using Heimdall.Web.Shared;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 
@@ -10,32 +11,19 @@ public partial class DeviceAdmin
     [Inject]
     private HttpClient Http { get; set; }
 
+    private NewDeviceModalForm NewDeviceModal { get; set; }
+
     // Placeholder
     public async Task ListDevicesAsync()
     {
-        try
-        {
-            var devices = await this.Http.GetFromJsonAsync<List<Device>>(
-                "api/admin/devices",
-                options: Helpers.DefaultJsonOptions);
-        }
-        catch (AccessTokenNotAvailableException exception)
-        {
-            exception.Redirect();
-        }
+        this.NewDeviceModal.Open();
+        await Task.Yield();
     }
 
-    public async Task CreateDeviceAsync()
+    private async Task CreateDeviceAsync(Device newDevice)
     {
         try
         {
-            var newDevice = new Device
-            {
-                Type = DeviceType.ShellySwitch,
-                Name = "Fake Device " + Guid.NewGuid().ToString().Split('-')[0],
-                HostOrIPAddress = "127.0.0.1",
-            };
-
             await this.Http.PostAsJsonAsync<Device>(
                 $"api/admin/devices",
                 newDevice,
