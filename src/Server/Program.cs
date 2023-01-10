@@ -1,5 +1,7 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
+using Heimdall.Integrations;
+using Heimdall.Integrations.Shelly;
 using Heimdall.Server.Security;
 using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authentication;
@@ -43,6 +45,9 @@ public static class Program
         builder.Services.Configure<SqliteStorageAccessOptions>(
             builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
         builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
+
+        builder.Services.AddSingleton<ShellyClient>();
+        builder.Services.AddTransient<IDeviceControllerFactory, DeviceControllerFactory>();
 
         builder.Services.AddControllers()
             .AddJsonOptions(opts =>
