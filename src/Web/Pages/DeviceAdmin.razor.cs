@@ -16,6 +16,7 @@ public partial class DeviceAdmin
     // Placeholder
     public async Task ListDevicesAsync()
     {
+        this.NewDeviceModal.Clear();
         this.NewDeviceModal.Open();
         await Task.Yield();
     }
@@ -28,6 +29,7 @@ public partial class DeviceAdmin
                 $"api/admin/devices",
                 newDevice,
                 options: Helpers.DefaultJsonOptions);
+            this.StateHasChanged();
         }
         catch (AccessTokenNotAvailableException exception)
         {

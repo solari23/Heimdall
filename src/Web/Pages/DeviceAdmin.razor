@@ -32,7 +32,39 @@
                    TModel="Device"
                    FormTitle="New Device"
                    AsyncSaveDelegate="this.CreateDeviceAsync">
-            <p>Hello World</p>
+
+
+            <div class="form-floating row mb-4">
+                <InputSelect id="newDeviceType"
+                            class="form-select"
+                            placeholder="Device Type"
+                            @bind-Value="NewDeviceModal.Model.Type">
+                    @foreach (var possibleDeviceType in Enum.GetValues<DeviceType>().Where(v => v != DeviceType.Unknown))
+                    {
+                        <option value="@possibleDeviceType">@(EnumUtil<DeviceType>.ToPrettyString(possibleDeviceType))</option>
+                    }
+                </InputSelect>
+                <label for="newDeviceType">Device Type</label>
+                <ValidationMessage For="@(() => NewDeviceModal.Model.Type)" />
+            </div>
+
+            <div class="form-floating row mb-4">
+                <InputText id="newDeviceName"
+                            class="form-control"
+                            placeholder="Device Name"
+                            @bind-Value="NewDeviceModal.Model.Name" />
+                <label for="newDeviceName">Device Name</label>
+                <ValidationMessage For="@(() => NewDeviceModal.Model.Name)" />
+            </div>
+
+            <div class="form-floating row mb-4">
+                <InputText id="newDeviceHost"
+                            class="form-control"
+                            placeholder="Device Host or IP Address"
+                            @bind-Value="NewDeviceModal.Model.HostOrIPAddress" />
+                <label for="newDeviceHost">Device Host or IP Address</label>
+                <ValidationMessage For="@(() => NewDeviceModal.Model.HostOrIPAddress)" />
+            </div>
         </FormModal>
     }
 </AuthorizeView>
