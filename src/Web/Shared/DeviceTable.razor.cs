@@ -16,18 +16,27 @@ public partial class DeviceTable
 
     private List<Device> devices;
 
-    protected async override Task OnInitializedAsync()
+    public async Task ResetAsync()
     {
         try
         {
+            this.devices = null;
+            this.StateHasChanged();
+
             this.devices = await this.Http.GetFromJsonAsync<List<Device>>(
                 "api/admin/devices",
                 options: Helpers.DefaultJsonOptions);
+            this.StateHasChanged();
         }
         catch (AccessTokenNotAvailableException exception)
         {
             exception.Redirect();
         }
+    }
+
+    protected async override Task OnInitializedAsync()
+    {
+        await this.ResetAsync();
     }
 
     private async Task ConfirmAndDeleteDeviceAsync(Device deviceToDelete)

@@ -11,14 +11,14 @@ public partial class DeviceAdmin
     [Inject]
     private HttpClient Http { get; set; }
 
+    private DeviceTable DeviceTable { get; set; }
+
     private FormModal<Device> NewDeviceModal { get; set; }
 
-    // Placeholder
-    public async Task ListDevicesAsync()
+    public void ShowNewDeviceForm()
     {
         this.NewDeviceModal.Clear();
         this.NewDeviceModal.Open();
-        await Task.Yield();
     }
 
     private async Task CreateDeviceAsync(Device newDevice)
@@ -29,7 +29,7 @@ public partial class DeviceAdmin
                 $"api/admin/devices",
                 newDevice,
                 options: Helpers.DefaultJsonOptions);
-            this.StateHasChanged();
+            await this.DeviceTable.ResetAsync();
         }
         catch (AccessTokenNotAvailableException exception)
         {

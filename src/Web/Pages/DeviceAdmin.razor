@@ -15,15 +15,12 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-9 justify-content-start">
-                    <DeviceTable />
+                    <DeviceTable @ref="DeviceTable" />
                 </div>
             </div>
             <div class="row">
-                <div class="col-1">
-                    <button class="btn btn-primary" id="B1" @onclick="ListDevicesAsync">List</button>
-                </div>
-                <div class="col-1">
-                    <button class="btn btn-primary" id="B2">Create</button>
+                <div class="col">
+                    <button class="btn btn-primary" @onclick="ShowNewDeviceForm">+ Add</button>
                 </div>
             </div>
         </div>
@@ -32,7 +29,6 @@
                    TModel="Device"
                    FormTitle="New Device"
                    AsyncSaveDelegate="this.CreateDeviceAsync">
-
 
             <div class="form-floating row mb-4">
                 <InputSelect id="newDeviceType"
