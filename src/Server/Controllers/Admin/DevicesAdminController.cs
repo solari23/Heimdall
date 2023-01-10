@@ -25,7 +25,10 @@ public class DevicesAdminController : Controller
     [HttpGet]
     public async Task<IActionResult> ListAllAsync(CancellationToken ct)
     {
-        var devices = await this.StorageAccess.GetDevicesAsync(ct);
+        var deviceQueryResult = await this.StorageAccess.GetDevicesAsync(ct);
+
+        var devices = deviceQueryResult.WasFound ? deviceQueryResult.Data : new List<Device>();
+
         return this.Ok(devices);
     }
 

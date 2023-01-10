@@ -1,10 +1,12 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using Heimdall.Integrations;
 using Heimdall.Models;
 using Heimdall.Models.Dto;
 using Heimdall.Models.Requests;
 using Heimdall.Server.Security;
+using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
@@ -15,66 +17,67 @@ namespace Heimdall.Server.Controllers.Devices;
 [RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
 public class SwitchesController : Controller
 {
-    private static List<SwitchInfo> Switches => new()
+    public SwitchesController(
+        IDeviceControllerFactory deviceControllerFactory,
+        IStorageAccess storageAccess)
     {
-        new SwitchInfo
-        {
-            Id = "FOOBAZ_1",
-            Label = "The best switch ever",
-            State = SwitchState.Unknown,
-        },
-        new SwitchInfo
-        {
-            Id = "FOOBAZ_2",
-            Label = "This one is on",
-            State = SwitchState.Unknown,
-        },
-        new SwitchInfo
-        {
-            Id = "FOOBAZ_3",
-            Label = "This one is off",
-            State = SwitchState.Unknown,
-        },
-    };
+        this.DeviceControllerFactory = deviceControllerFactory;
+        this.StorageAccess = storageAccess;
+    }
 
-    private static readonly Dictionary<string, SwitchState> CurrentStates = new()
-    {
-        { "FOOBAZ_1", SwitchState.Unknown },
-        { "FOOBAZ_2", SwitchState.On },
-        { "FOOBAZ_3", SwitchState.Off },
-    };
+    private IDeviceControllerFactory DeviceControllerFactory { get; }
+
+    private IStorageAccess StorageAccess { get; }
 
     [HttpGet]
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> ListAllAsync()
     {
-        await Task.Delay(700);
-        return this.Ok(Switches);
+        var queryResult = await this.StorageAccess.GetDevicesAsync(DeviceType.ShellySwitch);
+
+        var switches = queryResult.WasFound
+            ? queryResult.Data.Select(d =>
+                new SwitchInfo
+                {
+                    Id = d.Id,
+                    Label = d.Name,
+                    State = SwitchState.Unknown,
+                }).ToArray()
+            : Array.Empty<SwitchInfo>();
+
+        return this.Ok(switches);
     }
 
     [HttpGet("{switchId}")]
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> GetAsync(string switchId)
     {
-        await Task.Delay(400);
-        if (switchId == "FOOBAZ_2")
-        {
-            await Task.Delay(500);
-        }
-        else if (switchId == "FOOBAZ_3")
-        {
-            await Task.Delay(200);
-        }
+        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
 
-        var switchInfo = Switches.FirstOrDefault(s => s.Id == switchId);
-
-        if (switchInfo is null
-            || !CurrentStates.TryGetValue(switchId, out var currentState))
+        if (!queryResult.WasFound)
         {
+            // TODO: Define and send standard error response.
             return this.NotFound();
         }
 
-        switchInfo.State = currentState;
+        var switchState = SwitchState.Unknown;
+
+        try
+        {
+            var switchController = this.DeviceControllerFactory.GetSwitchController(queryResult.Data);
+            switchState = await switchController.GetCurrentStateAsync();
+        }
+        catch (Exception)
+        {
+            // Swallow.
+        }
+
+        var switchInfo = new SwitchInfo
+        {
+            Id = queryResult.Data.Id,
+            Label = queryResult.Data.Name,
+            State = switchState,
+        };
 
         return this.Ok(switchInfo);
     }
@@ -93,12 +96,14 @@ public class SwitchesController : Controller
             return this.BadRequest();
         }
 
-        if (!CurrentStates.ContainsKey(switchId))
+        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
+
+        if (!queryResult.WasFound)
         {
+            // TODO: Define and send standard error response.
             return this.NotFound();
         }
 
-        CurrentStates[switchId] = request.State;
         return this.Ok();
     }
 }

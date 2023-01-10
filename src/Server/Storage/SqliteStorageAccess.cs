@@ -20,6 +20,8 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
 
     private const string AllDevicesQuery = "SELECT Id, Type, Name, HostOrIPAddress FROM Devices";
 
+    private const string DeviceByIdQuery = $"SELECT Id, Type, Name, HostOrIPAddress FROM Devices WHERE Id = ${nameof(Device.Id)}";
+
     private const string DeviceCreationCommand = $@"
         INSERT INTO Devices (Id, Type, Name, HostOrIPAddress)
         VALUES (
@@ -28,7 +30,7 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
             ${nameof(Device.Name)},
             ${nameof(Device.HostOrIPAddress)})";
 
-    private const string DeviceDeletionCommand = $@"DELETE FROM Devices WHERE Id = ${nameof(Device.Id)}";
+    private const string DeviceDeletionCommand = $"DELETE FROM Devices WHERE Id = ${nameof(Device.Id)}";
 
     public SqliteStorageAccess(IOptions<SqliteStorageAccessOptions> options)
     {
@@ -53,10 +55,25 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
         return connection;
     }
 
-    public Task<List<Device>> GetDevicesAsync(params DeviceType[] typeFilter)
+    public async Task<QueryResult<Device>> GetDeviceByIdAsync(string deviceId, CancellationToken ct = default)
+    {
+        var foundDevices = await this.ExecuteDeviceQueryAsync(
+            DeviceByIdQuery,
+            ct,
+            (nameof(Device.Id), deviceId));
+
+        if (!foundDevices.Any())
+        {
+            return QueryResult<Device>.NotFound();
+        }
+
+        return QueryResult<Device>.Found(foundDevices.First());
+    }
+
+    public Task<QueryResult<List<Device>>> GetDevicesAsync(params DeviceType[] typeFilter)
         => this.GetDevicesAsync(default, typeFilter);
 
-    public async Task<List<Device>> GetDevicesAsync(CancellationToken ct, params DeviceType[] typeFilter)
+    public async Task<QueryResult<List<Device>>> GetDevicesAsync(CancellationToken ct, params DeviceType[] typeFilter)
     {
         string query = AllDevicesQuery;
 
@@ -70,10 +87,29 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
             query += $" WHERE Type IN ({allowedTypesExpression})";
         }
 
+        var foundDevices = await this.ExecuteDeviceQueryAsync(query, ct);
+        return foundDevices.Any()
+            ? QueryResult<List<Device>>.Found(foundDevices)
+            : QueryResult<List<Device>>.NotFound();
+    }
+
+    private async Task<List<Device>> ExecuteDeviceQueryAsync(
+        string query,
+        CancellationToken ct,
+        params (string Key, string Value)[] parameters)
+    {
         var devices = new List<Device>();
 
         var command = this.Connection.Value.CreateCommand();
         command.CommandText = query;
+
+        if (parameters is not null)
+        {
+            foreach (var parameter in parameters)
+            {
+                command.Parameters.AddWithValue(parameter.Key, parameter.Value);
+            }
+        }
 
         using var queryReader = await command.ExecuteReaderAsync(ct);
 
@@ -82,7 +118,7 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
             var device = new Device
             {
                 Id = queryReader.GetString(0),
-                Type = Enum.TryParse<DeviceType>(queryReader.GetString(1), out var typeValue) 
+                Type = Enum.TryParse<DeviceType>(queryReader.GetString(1), out var typeValue)
                     ? typeValue
                     : DeviceType.Unknown,
                 Name = queryReader.GetString(2),
