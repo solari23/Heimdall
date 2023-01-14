@@ -46,6 +46,8 @@ public class HeimdallRole
 
     public static HeimdallRole FromString(string roleString) => roleString;
 
+    public override string ToString() => this;
+
     public bool Satisfies(HeimdallRole requiredRole)
     {
         ArgumentNullException.ThrowIfNull(requiredRole);
