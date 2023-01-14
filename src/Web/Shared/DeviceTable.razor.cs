@@ -64,7 +64,7 @@ public partial class DeviceTable
         => type switch
         {
             DeviceType.Unknown => "oi-question-mark",
-            DeviceType.ShellySwitch => "oi-pulse",
+            DeviceType.ShellyPlug => "oi-pulse",
             _ => "oi-question-mark",
         };
 }

@@ -23,7 +23,7 @@ public class DeviceControllerFactory : IDeviceControllerFactory
     public ISwitchController GetSwitchController(Device device) 
         => device.Type switch
         {
-            DeviceType.ShellySwitch => new ShellyDeviceController(device, this.ShellyClient),
+            DeviceType.ShellyPlug => new ShellyDeviceController(device, this.ShellyClient),
             _ => throw new ArgumentException($"Switch Controller not available for '{device.Type}' devices.", nameof(device)),
         };
 }
