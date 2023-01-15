@@ -7,14 +7,16 @@ using Heimdall.Models.Dto;
 using Heimdall.Models.Requests;
 using Heimdall.Server.Security;
 using Heimdall.Server.Storage;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
 namespace Heimdall.Server.Controllers.Devices;
 
+[Authorize]
 [ApiController]
 [Route("api/devices/[controller]")]
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+[RequiredScope(RequiredScopesConfigurationKey = AadHelpers.RequiredScopesConfigKey)]
 public class SwitchesController : Controller
 {
     public SwitchesController(

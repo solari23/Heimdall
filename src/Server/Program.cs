@@ -6,6 +6,7 @@ using Heimdall.Server.Security;
 using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.Identity.Web;
 
 namespace Heimdall.Server;
@@ -34,8 +35,27 @@ public static class Program
         // Add services to the container.
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddScheme<AuthenticationSchemeOptions, HeimdallSecretKeyAuthenticationHandler>(
+                HeimdallSecretKey.SchemeName,
+                opts => { })
             .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
+        builder.Services.AddAuthorization(options =>
+        {
+            // Set up the default policy that will apply to any controller/action
+            // tagged with the plain [Authorize] attribute.
+            options.DefaultPolicy = new AuthorizationPolicyBuilder()
+
+                // The user must be authenticated.
+                .RequireAuthenticatedUser()
+
+                // Allows either HeimdallSecretKey or JwtBearer (AAD) authentication.
+                .AddAuthenticationSchemes(
+                    HeimdallSecretKey.SchemeName,
+                    JwtBearerDefaults.AuthenticationScheme)
+                .Build();
+        });
         builder.Services.AddHeimdallRoleAuthorization();
+        builder.Services.AddSingleton<HeimdallSecretKey>();
 
         builder.Services.Configure<UserIdentityServiceOptions>(
             builder.Configuration.GetSection(nameof(UserIdentityService)));

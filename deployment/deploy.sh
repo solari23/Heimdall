@@ -14,6 +14,17 @@ useradd --system --create-home heimdall
 
 # Create storage directory (will do nothing if it exists)
 mkdir -p $storageDir
+
+# Create the secret key file
+if [[ ! -f $storageDir/SecretKey ]]
+then
+  echo "Creating secret key file"
+  openssl rand -hex -out /dev/stdout 32 | tr -d '\n' > $storageDir/SecretKey
+  
+  # Read-only perms, only for file owner (Heimdall user)
+  chmod 400 $storageDir/SecretKey
+fi
+
 chown -R heimdall:heimdall $storageDir
 
 # Copy over the service binaries

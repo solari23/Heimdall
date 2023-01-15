@@ -9,8 +9,6 @@ namespace Heimdall.Server.Security;
 
 public class HeimdallRolesClaimsTransformation : IClaimsTransformation
 {
-    private const string AzureADObjectIdClaimType = "http://schemas.microsoft.com/identity/claims/objectidentifier";
-
     public HeimdallRolesClaimsTransformation(IUserIdentityService userService)
     {
         this.UserService = userService;
@@ -25,7 +23,7 @@ public class HeimdallRolesClaimsTransformation : IClaimsTransformation
             var role = HeimdallRole.NoRole;
 
             var oidClaim = principal.Claims
-                .Where(c => c.Type == AzureADObjectIdClaimType)
+                .Where(c => c.Type == AadHelpers.ObjectIdClaimType)
                 .FirstOrDefault();
 
             if (oidClaim is not null)

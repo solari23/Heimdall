@@ -4,14 +4,16 @@
 using Heimdall.Models;
 using Heimdall.Server.Security;
 using Heimdall.Server.Storage;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;
 
 namespace Heimdall.Server.Controllers.Admin;
 
+[Authorize]
 [ApiController]
 [Route("api/admin/devices")]
-[RequiredScope(RequiredScopesConfigurationKey = "AzureAd:Scopes")]
+[RequiredScope(RequiredScopesConfigurationKey = AadHelpers.RequiredScopesConfigKey)]
 [HeimdallRoleAuthorize(HeimdallRole.UberAdmin)]
 public class DevicesAdminController : Controller
 {
