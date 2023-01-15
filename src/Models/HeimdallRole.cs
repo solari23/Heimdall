@@ -9,12 +9,21 @@ public class HeimdallRole
 
     public const string ClaimType = "HeimdallRole";
 
+    // Uber admins can modify the home configuration.
     public const string UberAdmin = "Heimdall-UberAdmin";
     public static readonly HeimdallRole UberAdminRole = new (UberAdmin, 100);
 
+    // Secret key is used by other Heimdall services on the local node.
+    // These services should have admin-leven access to home devices but no
+    // ability to modify the home configuration.
+    public const string SecretKeyUser = "Heimdall-SecretKeyUser";
+    public static readonly HeimdallRole SecretKeyUserRole = new(SecretKeyUser, 75);
+
+    // HomeAdmins can modify the state of devices (e.g. turn on lights, etc.)
     public const string HomeAdmin = "Heimdall-HomeAdmin";
     public static readonly HeimdallRole HomeAdminRole = new (HomeAdmin, 70);
 
+    // HomeViewers can only view the current state of devices but not modify anything.
     public const string HomeViewer = "Heimdall-HomeViewer";
     public static readonly HeimdallRole HomeViewerRole = new (HomeViewer, 10);
 
@@ -24,6 +33,7 @@ public class HeimdallRole
         = new Dictionary<string, HeimdallRole>(StringComparer.OrdinalIgnoreCase)
         {
             { UberAdminRole.Name, UberAdminRole },
+            { SecretKeyUserRole.Name, SecretKeyUserRole },
             { HomeAdminRole.Name, HomeAdminRole },
             { HomeViewerRole.Name, HomeViewerRole },
             { NoRole.Name, NoRole },

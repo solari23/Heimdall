@@ -36,8 +36,8 @@ public static class Program
         builder.Services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             .AddScheme<AuthenticationSchemeOptions, HeimdallSecretKeyAuthenticationHandler>(
-                HeimdallSecretKeyAuthenticationHandler.SchemeName,
-                null)
+                HeimdallSecretKey.SchemeName,
+                opts => { })
             .AddMicrosoftIdentityWebApi(builder.Configuration.GetSection("AzureAd"));
         builder.Services.AddAuthorization(options =>
         {
@@ -50,11 +50,12 @@ public static class Program
 
                 // Allows either HeimdallSecretKey or JwtBearer (AAD) authentication.
                 .AddAuthenticationSchemes(
-                    HeimdallSecretKeyAuthenticationHandler.SchemeName,
+                    HeimdallSecretKey.SchemeName,
                     JwtBearerDefaults.AuthenticationScheme)
                 .Build();
         });
         builder.Services.AddHeimdallRoleAuthorization();
+        builder.Services.AddSingleton<HeimdallSecretKey>();
 
         builder.Services.Configure<UserIdentityServiceOptions>(
             builder.Configuration.GetSection(nameof(UserIdentityService)));

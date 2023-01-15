@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Net;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
 using Heimdall.Models;
@@ -11,8 +12,6 @@ namespace Heimdall.Server.Security;
 
 public class HeimdallSecretKeyAuthenticationHandler : AuthenticationHandler<AuthenticationSchemeOptions>
 {
-    public static string SchemeName = "HeimdallSecretKey";
-
     public const string SecretKeyAuthenticationType = "HeimdallSecretKey";
 
     public HeimdallSecretKeyAuthenticationHandler(
@@ -20,45 +19,51 @@ public class HeimdallSecretKeyAuthenticationHandler : AuthenticationHandler<Auth
         ILoggerFactory logger,
         UrlEncoder encoder,
         ISystemClock clock,
-        IConfiguration config)
+        IConfiguration config,
+        HeimdallSecretKey secretKey)
         : base(options, logger, encoder, clock)
     {
         this.Config = config;
+        this.SecretKey = secretKey;
     }
 
     private IConfiguration Config { get; }
 
-    protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
-    {
-        await Task.Yield();
+    private HeimdallSecretKey SecretKey { get; }
 
+    protected override Task<AuthenticateResult> HandleAuthenticateAsync()
+    {
         if (!this.Request.Headers.TryGetValue("Authorization", out var headerValues))
         {
-            return AuthenticateResult.NoResult();
+            return Task.FromResult(AuthenticateResult.NoResult());
         }
 
         var authHeader = headerValues[0];
-        if (!authHeader.StartsWith(SchemeName))
+        if (!authHeader.StartsWith(HeimdallSecretKey.SchemeName))
         {
-            return AuthenticateResult.NoResult();
+            return Task.FromResult(AuthenticateResult.NoResult());
         }
 
-        var key = authHeader.Substring(SchemeName.Length).Trim();
-        if (string.IsNullOrWhiteSpace(key))
+        var inputKey = authHeader.Substring(HeimdallSecretKey.SchemeName.Length).Trim();
+        if (string.IsNullOrWhiteSpace(inputKey))
         {
-            return AuthenticateResult.Fail("Missing key");
+            return Task.FromResult(AuthenticateResult.Fail("Missing key"));
         }
 
-        // TODO: Secret keys are only allowed on private IPs (on the local network).
-
-        // TODO: Implement key.
-        if (key != "woohoo")
+        // Secret keys are only allowed on localhost IPs.
+        var clientIP = this.Request.HttpContext.Connection.RemoteIpAddress;
+        if (clientIP is null || !IPAddress.IsLoopback(clientIP))
         {
-            return AuthenticateResult.Fail("Invalid key");
+            return Task.FromResult(AuthenticateResult.Fail("Client secret not allowed from outside of localhost"));
         }
 
-        // TODO: Role based on key.
-        return AuthenticateResult.Success(this.CreateAuthenticatedTicket(HeimdallRole.NoRole));
+        if (!this.SecretKey.Authenticate(inputKey))
+        {
+            return Task.FromResult(AuthenticateResult.Fail("Invalid key"));
+        }
+
+        var ticket = this.CreateAuthenticatedTicket(HeimdallRole.SecretKeyUserRole);
+        return Task.FromResult(AuthenticateResult.Success(ticket));
     }
 
     private AuthenticationTicket CreateAuthenticatedTicket(HeimdallRole role)
@@ -79,6 +84,6 @@ public class HeimdallSecretKeyAuthenticationHandler : AuthenticationHandler<Auth
             claims,
             authenticationType: SecretKeyAuthenticationType);
         var principal = new ClaimsPrincipal(identity);
-        return new AuthenticationTicket(principal, SchemeName);
+        return new AuthenticationTicket(principal, HeimdallSecretKey.SchemeName);
     }
 }

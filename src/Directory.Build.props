@@ -5,4 +5,5 @@
     <InformationalVersion>$(BuildCommitId)</InformationalVersion>
     <Copyright>© Alexandre Kerametlian</Copyright>
   </PropertyGroup>
+  
 </Project>
