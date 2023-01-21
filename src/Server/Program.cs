@@ -16,6 +16,15 @@ public static class Program
     public static void Main(string[] args)
     {
         var builder = WebApplication.CreateBuilder(args);
+        builder.Configuration
+            .AddJsonFile(
+                "heimdall.appsettings.json",
+                optional: false,
+                reloadOnChange: true)
+            .AddJsonFile(
+                $"heimdall.appsettings.{builder.Environment.EnvironmentName}.json",
+                optional: true,
+                reloadOnChange: true);
 
         builder.WebHost.UseKestrel(kestrelOptions =>
         {
