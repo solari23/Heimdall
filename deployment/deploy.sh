@@ -5,9 +5,11 @@ pushd `dirname $0`
 serviceDir=/home/heimdall/service
 storageDir=/home/heimdall/storage
 
-# Stop existing service (will fail if it doesn't exist)
+# Stop existing services (will fail if they don't exist)
 systemctl stop heimdall.service
 systemctl disable heimdall.service
+systemctl stop heimdall-webhookproxy.service
+systemctl disable heimdall-webhookproxy.service
 
 # Create the service account (will just fail if it exists)
 useradd --system --create-home heimdall
@@ -33,13 +35,18 @@ mkdir $serviceDir
 cp -r . $serviceDir
 
 chmod +x $serviceDir/Heimdall.Server
+chmod +x $serviceDir/Heimdall.WebhookProxy
 chown -R heimdall:heimdall $serviceDir
 
-# Copy over the new systemd config + start it
+# Copy over the new systemd configs + start them
 cp heimdall.service /etc/systemd/system/
+cp heimdall-webhookproxy.service /etc/systemd/system/
 systemctl daemon-reload
+
 systemctl enable heimdall.service
 systemctl start heimdall.service
+systemctl enable heimdall-webhookproxy.service
+systemctl start heimdall-webhookproxy.service
 
 # TODO: probe check here
 # sleep 10
