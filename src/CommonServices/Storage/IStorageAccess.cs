@@ -2,6 +2,7 @@
 // Licensed under the Apache License, Version 2.0.
 
 using Heimdall.Models;
+using Heimdall.Models.Webhooks;
 
 namespace Heimdall.CommonServices.Storage;
 
@@ -16,4 +17,12 @@ public interface IStorageAccess
     Task AddDeviceAsync(Device device);
 
     Task DeleteDeviceAsync(string deviceId);
+
+    Task<QueryResult<Webhook>> GetWebhookByIdAsync(string webhookId, CancellationToken ct = default);
+
+    Task<QueryResult<List<Webhook>>> GetWebhooksAsync(CancellationToken ct = default);
+
+    Task AddWebhookAsync(Webhook webhook);
+
+    Task DeleteWebhookAsync(string webhookId);
 }
