@@ -16,4 +16,23 @@ public static class JsonHelpers
         options.Converters.Add(new JsonStringEnumConverter());
         return options;
     }
+
+    public static bool TryGetPropertyCaseInsensitive(
+        this JsonElement element,
+        string propertyName,
+        out JsonElement value)
+    {
+        value = default;
+
+        foreach (var property in element.EnumerateObject().OfType<JsonProperty>())
+        {
+            if (property.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase))
+            {
+                value = property.Value;
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

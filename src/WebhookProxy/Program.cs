@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Text.Json.Serialization;
 using Heimdall.CommonServices.Security;
 using Heimdall.CommonServices.Storage;
 
@@ -26,7 +27,11 @@ public class Program
                 reloadOnChange: true);
 
         // Add services to the container.
-        builder.Services.AddControllers();
+        builder.Services.AddControllers()
+            .AddJsonOptions(opts =>
+            {
+                opts.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            });
 
         builder.Services.AddSingleton<HeimdallSecretKey>();
 
