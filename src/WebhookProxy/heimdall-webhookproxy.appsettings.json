@@ -1,4 +1,8 @@
 {
+  "SqliteStorageAccess": {
+    "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db"
+  },
+  "HeimdallSecretKeyFile": "/home/heimdall/storage/SecretKey",
   "Logging": {
     "LogLevel": {
       "Default": "Information",

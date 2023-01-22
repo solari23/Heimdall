@@ -5,7 +5,7 @@ using Heimdall.Models;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Options;
 
-namespace Heimdall.Server.Storage;
+namespace Heimdall.CommonServices.Storage;
 
 public class SqliteStorageAccess : IStorageAccess, IDisposable
 {

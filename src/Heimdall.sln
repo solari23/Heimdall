@@ -12,6 +12,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.Integrations", "In
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.WebhookProxy", "WebhookProxy\Heimdall.WebhookProxy.csproj", "{DB62AE47-9EB0-45D9-A57B-148E05FA5800}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Heimdall.CommonServices", "CommonServices\Heimdall.CommonServices.csproj", "{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -82,6 +84,18 @@ Global
 		{DB62AE47-9EB0-45D9-A57B-148E05FA5800}.Release|x64.Build.0 = Release|Any CPU
 		{DB62AE47-9EB0-45D9-A57B-148E05FA5800}.Release|x86.ActiveCfg = Release|Any CPU
 		{DB62AE47-9EB0-45D9-A57B-148E05FA5800}.Release|x86.Build.0 = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|x64.Build.0 = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Debug|x86.Build.0 = Debug|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|x64.ActiveCfg = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|x64.Build.0 = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|x86.ActiveCfg = Release|Any CPU
+		{24CEB9FD-D8E6-4D7B-BE7C-30BC20F6C98F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

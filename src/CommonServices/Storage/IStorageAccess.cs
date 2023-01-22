@@ -3,7 +3,7 @@
 
 using Heimdall.Models;
 
-namespace Heimdall.Server.Storage;
+namespace Heimdall.CommonServices.Storage;
 
 public interface IStorageAccess
 {

@@ -1,12 +1,12 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using Heimdall.CommonServices.Storage;
 using Heimdall.Integrations;
 using Heimdall.Models;
 using Heimdall.Models.Dto;
 using Heimdall.Models.Requests;
 using Heimdall.Server.Security;
-using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Web.Resource;

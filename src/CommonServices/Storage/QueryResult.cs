@@ -1,7 +1,7 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
-namespace Heimdall.Server.Storage;
+namespace Heimdall.CommonServices.Storage;
 
 public class QueryResult<TData>
     where TData : class

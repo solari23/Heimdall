@@ -1,8 +1,8 @@
 {
   "SqliteStorageAccess": {
-    "DatabaseFilePath": "Heimdall.ignore"
+    "DatabaseFilePath": "../DevData/Heimdall.ignore"
   },
-  "HeimdallSecretKeyFile": "SecretKey.ignore",
+  "HeimdallSecretKeyFile": "../DevData/SecretKey.ignore",
   "Logging": {
     "LogLevel": {
       "Default": "Information",

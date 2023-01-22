@@ -1,9 +1,10 @@
 ﻿using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
+
+using Heimdall.CommonServices.Storage;
 using Heimdall.Integrations;
 using Heimdall.Integrations.Shelly;
 using Heimdall.Server.Security;
-using Heimdall.Server.Storage;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
