@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using Heimdall.Models;
 using Heimdall.Models.Dto;
 using Heimdall.Models.Requests;
 using Microsoft.AspNetCore.Components;
@@ -17,7 +18,7 @@ public partial class SwitchPanelItem
         {
             this.Switch = await this.Http.GetFromJsonAsync<SwitchInfo>(
                 $"api/devices/switches/{this.Switch.Id}",
-                options: Helpers.DefaultJsonOptions);
+                options: JsonHelpers.DefaultJsonOptions);
             this.LoadAttempted = true;
         }
         catch (AccessTokenNotAvailableException exception)
@@ -41,7 +42,7 @@ public partial class SwitchPanelItem
                 {
                     State = newState,
                 },
-                options: Helpers.DefaultJsonOptions);
+                options: JsonHelpers.DefaultJsonOptions);
             response.EnsureSuccessStatusCode();
             this.Switch.State = newState;
         }

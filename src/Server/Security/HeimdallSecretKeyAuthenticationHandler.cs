@@ -4,6 +4,8 @@
 using System.Net;
 using System.Security.Claims;
 using System.Text.Encodings.Web;
+
+using Heimdall.CommonServices.Security;
 using Heimdall.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Options;

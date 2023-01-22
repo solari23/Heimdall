@@ -25,7 +25,7 @@ public partial class DeviceTable
 
             this.devices = await this.Http.GetFromJsonAsync<List<Device>>(
                 "api/admin/devices",
-                options: Helpers.DefaultJsonOptions);
+                options: JsonHelpers.DefaultJsonOptions);
             this.StateHasChanged();
         }
         catch (AccessTokenNotAvailableException exception)

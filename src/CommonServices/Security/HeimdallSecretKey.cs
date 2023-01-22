@@ -1,7 +1,10 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
-namespace Heimdall.Server.Security;
+using System.Net.Http.Headers;
+using Microsoft.Extensions.Configuration;
+
+namespace Heimdall.CommonServices.Security;
 
 public class HeimdallSecretKey
 {
@@ -23,6 +26,9 @@ public class HeimdallSecretKey
 
     public bool Authenticate(string inputKey)
         => StringSecureEquals(this.LoadedKey, inputKey);
+
+    public AuthenticationHeaderValue ToAuthenticationHeader()
+        => new AuthenticationHeaderValue(SchemeName, this.LoadedKey);
 
     private static bool StringSecureEquals(string left, string right)
     {

@@ -28,7 +28,7 @@ public partial class DeviceAdmin
             await this.Http.PostAsJsonAsync<Device>(
                 $"api/admin/devices",
                 newDevice,
-                options: Helpers.DefaultJsonOptions);
+                options: JsonHelpers.DefaultJsonOptions);
             await this.DeviceTable.ResetAsync();
         }
         catch (AccessTokenNotAvailableException exception)

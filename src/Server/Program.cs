@@ -1,6 +1,10 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿// Copyright (c) Alexandre Kerametlian.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
 
+using Heimdall.CommonServices.Security;
 using Heimdall.CommonServices.Storage;
 using Heimdall.Integrations;
 using Heimdall.Integrations.Shelly;

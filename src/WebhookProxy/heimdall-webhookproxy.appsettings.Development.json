@@ -3,6 +3,7 @@
     "DatabaseFilePath": "../DevData/Heimdall.ignore"
   },
   "HeimdallSecretKeyFile": "../DevData/SecretKey.ignore",
+  "HeimdallServerApiUri": "https://localhost:5001",
   "Logging": {
     "LogLevel": {
       "Default": "Information",

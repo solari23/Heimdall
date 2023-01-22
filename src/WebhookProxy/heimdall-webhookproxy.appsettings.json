@@ -4,6 +4,7 @@
     "ReadOnly":  true
   },
   "HeimdallSecretKeyFile": "/home/heimdall/storage/SecretKey",
+  "HeimdallServerApiUri": "https://localhost:443",
   "Logging": {
     "LogLevel": {
       "Default": "Information",

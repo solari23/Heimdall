@@ -107,7 +107,7 @@ else
 
         var idInfo = await ApiClient.GetFromJsonAsync<IdentityInfo>(
             "api/Identity",
-            options: Helpers.DefaultJsonOptions);
+            options: JsonHelpers.DefaultJsonOptions);
         UserRole = idInfo.HeimdallRole;
 
         DataLoaded = true;
