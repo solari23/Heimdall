@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using Heimdall.CommonServices.Storage;
+
 namespace Heimdall.WebhookProxy;
 
 public class Program
@@ -20,6 +22,10 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllers();
+
+        builder.Services.Configure<SqliteStorageAccessOptions>(
+            builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
+        builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
 
         var app = builder.Build();
         app.MapControllers();

@@ -1,6 +1,7 @@
 {
   "SqliteStorageAccess": {
-    "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db"
+    "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db",
+    "ReadOnly":  true
   },
   "HeimdallSecretKeyFile": "/home/heimdall/storage/SecretKey",
   "Logging": {

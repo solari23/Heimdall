@@ -44,8 +44,13 @@ public class SqliteStorageAccess : IStorageAccess, IDisposable
 
     private SqliteConnection OpenConnection()
     {
-        var connectionString = $"DataSource={this.Options.DatabaseFilePath}";
-        var connection = new SqliteConnection(connectionString);
+        var connectionStringBuilder = new SqliteConnectionStringBuilder();
+        connectionStringBuilder.DataSource = this.Options.DatabaseFilePath;
+        connectionStringBuilder.Mode = this.Options.ReadOnly
+            ? SqliteOpenMode.ReadOnly
+            : SqliteOpenMode.ReadWriteCreate;
+
+        var connection = new SqliteConnection(connectionStringBuilder.ConnectionString);
         connection.Open();
 
         var tableCreationCommand = connection.CreateCommand();
