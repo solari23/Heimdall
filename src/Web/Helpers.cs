@@ -51,4 +51,7 @@ public static class Helpers
 
     public static ValueTask<bool> ConfirmAsync(this IJSRuntime jsRuntime, string prompt)
         => jsRuntime.InvokeAsync<bool>("confirm", prompt);
+
+    public static ValueTask CopyToClipboardAsync(this IJSRuntime jsRuntime, string text)
+        => jsRuntime.InvokeVoidAsync("navigator.clipboard.writeText", text);
 }

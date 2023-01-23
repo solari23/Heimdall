@@ -1,0 +1,46 @@
+﻿@using Heimdall.Models;
+
+@if (this.webhooks is null)
+{
+    <div class="spinner-border" role="status"></div>
+}
+else
+{
+    <table class="table table-striped table-hover table-bordered">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col" class="fit">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Action(s)</th>
+                <th scope="col" class="fit"><!-- Empty --></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var webhook in this.webhooks)
+            {
+                <tr>
+                    <td>@webhook.Id</td>
+                    <td>@webhook.Name</td>
+                    <td>
+                        @foreach (var action in webhook.Actions)
+                        {
+                            // This method will usually complete synchronously so
+                            // waiting for the result shouldn't impact the UI.
+                            <p>@(this.GetActionDisplayStringAsync(action).GetAwaiter().GetResult())</p>
+                        }
+                    </td>
+                    <td>
+                        <button type="button" 
+                                class="btn btn-outline-secondary oi oi-clipboard"
+                                aria-label="copy to clipboard"
+                                @onclick=@(async () => await this.CopyWebhookUriToClipboardAsync(webhook)) />
+                        <button type="button" 
+                                class="btn btn-outline-secondary oi oi-trash"
+                                aria-label="delete"
+                                @onclick=@(async () => await this.ConfirmAndDeleteWebhookAsync(webhook)) />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}

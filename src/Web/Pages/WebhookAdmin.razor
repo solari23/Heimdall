@@ -1,0 +1,36 @@
+﻿@page "/webhookadmin"
+@using Heimdall.Models
+@using Heimdall.Models.Webhooks
+
+<h1 class="mb-4">Manage Webhooks</h1>
+
+<AuthorizeView>
+    @if (!context.User.HasDeviceAdminAccess())
+    {
+        <div class="alert alert-warning" role="alert">
+            &#9888;&#65039; You don't have access to manage devices.
+        </div>
+    }
+    else
+    {
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-9 justify-content-start">
+                    <WebhookTable @ref="WebhookTable" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <button class="btn btn-primary" @onclick="ShowNewWebhookForm">+ Add</button>
+                </div>
+            </div>
+        </div>
+
+        <FormModal @ref="NewWebhookModal"
+                   TModel="Webhook"
+                   FormTitle="New Webhook"
+                   AsyncSaveDelegate="this.CreateWebhookAsync">
+            <!-- TODO: Implement 'New Webhook' modal -->
+        </FormModal>
+    }
+</AuthorizeView>

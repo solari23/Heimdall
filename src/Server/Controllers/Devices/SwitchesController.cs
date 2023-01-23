@@ -58,7 +58,6 @@ public class SwitchesController : Controller
 
         if (!queryResult.WasFound)
         {
-            // TODO: Define and send standard error response.
             return this.NotFound();
         }
 
@@ -94,7 +93,6 @@ public class SwitchesController : Controller
 
         if (!queryResult.WasFound)
         {
-            // TODO: Define and send standard error response.
             return this.NotFound();
         }
 
@@ -111,7 +109,6 @@ public class SwitchesController : Controller
                 break;
 
             default:
-                // TODO: Define and send standard error response.
                 return this.BadRequest();
         }
 
