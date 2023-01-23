@@ -1,5 +1,6 @@
 ﻿using System.Net.Http.Json;
 using Heimdall.Models;
+using Heimdall.Models.Requests;
 using Heimdall.Models.Webhooks;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
@@ -14,6 +15,9 @@ public partial class WebhookTable
 
     [Inject]
     private IJSRuntime JSRuntime { get; set; }
+
+    [Inject]
+    private IConfiguration Config { get; set; }
 
     private List<Webhook> webhooks;
 
@@ -42,8 +46,11 @@ public partial class WebhookTable
 
     private async Task CopyWebhookUriToClipboardAsync(Webhook webhook)
     {
-        // TODO: Form webhook URL for clipboard.
-        await this.JSRuntime.CopyToClipboardAsync("HELLO WORLD");
+        var template = this.Config.GetValue<string>("HeimdallWebhookTemplate");
+        var uri = string.IsNullOrWhiteSpace(template)
+            ? webhook.Id
+            : string.Format(template, webhook.Id);
+        await this.JSRuntime.CopyToClipboardAsync(uri);
     }
 
     private async Task ConfirmAndDeleteWebhookAsync(Webhook webhookToDelete)
