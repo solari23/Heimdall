@@ -35,12 +35,16 @@ public partial class WebhookAdmin
         }
     }
 
-    private void AddWebhookAction()
+    private void AddWebhookAction(ActionKind actionKind)
     {
-        this.NewWebhookModal.Model.Actions.Add(new ToggleSwitchAction
+        var newAction = actionKind switch
         {
-            TargetDeviceId = "???",
-        });
+            ActionKind.ToggleSwitch => new ToggleSwitchAction(),
+            _ => throw new NotSupportedException(
+                $"Don't know how to render UI for action kind '{actionKind}'"),
+        };
+
+        this.NewWebhookModal.Model.Actions.Add(newAction);
         this.StateHasChanged();
     }
 
