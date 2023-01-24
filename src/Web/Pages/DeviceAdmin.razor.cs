@@ -15,12 +15,6 @@ public partial class DeviceAdmin
 
     private FormModal<Device> NewDeviceModal { get; set; }
 
-    public void ShowNewDeviceForm()
-    {
-        this.NewDeviceModal.Clear();
-        this.NewDeviceModal.Open();
-    }
-
     private async Task CreateDeviceAsync(Device newDevice)
     {
         try

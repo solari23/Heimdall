@@ -28,6 +28,8 @@ public static class Program
                 "api://761be819-70e2-46d9-8bbc-7fea5e5621db/access_as_user");
         }).AddAccountClaimsPrincipalFactory<HeimdallClaimsPrincipalFactory>();
 
+        builder.Services.AddTransient<BootstrapHelper>();
+
         await builder.Build().RunAsync();
     }
 }

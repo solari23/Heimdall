@@ -11,7 +11,7 @@
     <div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
         <nav class="flex-column">
             <div class="nav-item px-3">
-                <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
+                <NavLink class="nav-link text-truncate" href="" Match="NavLinkMatch.All">
                     <span class="oi oi-home" aria-hidden="true"></span> Home
                 </NavLink>
             </div>
@@ -19,13 +19,13 @@
             @if (context.User.HasDeviceAdminAccess())
             {
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="deviceadmin">
+                    <NavLink class="nav-link text-truncate" href="deviceadmin">
                         <span class="oi oi-aperture" aria-hidden="true"></span> Manage devices
                     </NavLink>
                 </div>
 
                 <div class="nav-item px-3">
-                    <NavLink class="nav-link" href="webhookadmin">
+                    <NavLink class="nav-link text-truncate" href="webhookadmin">
                         <span class="oi oi-loop" aria-hidden="true"></span> Manage webhooks
                     </NavLink>
                 </div>

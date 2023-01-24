@@ -21,7 +21,7 @@
             </div>
             <div class="row">
                 <div class="col">
-                    <button class="btn btn-primary" @onclick="ShowNewWebhookForm">+ Add</button>
+                    <button class="btn btn-primary" @onclick="() => this.NewWebhookModal.Open()">+ Add</button>
                 </div>
             </div>
         </div>
@@ -29,8 +29,52 @@
         <FormModal @ref="NewWebhookModal"
                    TModel="Webhook"
                    FormTitle="New Webhook"
-                   AsyncSaveDelegate="this.CreateWebhookAsync">
-            <!-- TODO: Implement 'New Webhook' modal -->
+                   AsyncSaveDelegate="this.CreateWebhookAsync"
+                   CreateNewModelObjectDelegate="this.CreateNewWebhookModel">
+
+            <div class="form-floating row mb-4">
+                <InputText id="newWebhookName"
+                           class="form-control"
+                           placeholder="Webhook Name"
+                           @bind-Value="this.NewWebhookModal.Model.Name" />
+                <label for="newDeviceName">Webhook Name</label>
+                <ValidationMessage For="@(() => this.NewWebhookModal.Model.Name)" />
+            </div>
+
+            <div class="row justify-content-between mb-2">
+                <div class="col-3">
+                    <h5>Actions</h5>
+                </div>
+                <div class="col-1 me-2">
+                    <button class="btn btn-primary btn-sm" type="button" @onclick="() => this.AddWebhookAction()">+</button>
+                </div>
+            </div>
+            <div class="accordion row" id="webhookActionsAccordion">
+                @for (int i = 0; i < this.NewWebhookModal.Model.Actions.Count; i++)
+                {
+                    int currentIndex = i;
+                    IAction currentAction = this.NewWebhookModal.Model.Actions[i];
+
+                    <div class="accordion-item">
+                        <h2 class="accordion-header">
+                            <button class="accordion-button"
+                                    type="button"
+                                    id="webhookActions_toggleCollapseButton_@currentIndex"
+                                    @onclick='() => this.BootstrapHelper.ToggleCollapse(
+                                        $"webhookActions_collapse_{currentIndex}",
+                                        $"webhookActions_toggleCollapseButton_{currentIndex}")'>
+                                @(EnumUtil<ActionKind>.ToPrettyString(currentAction.ActionKind))
+                            </button>
+                        </h2>
+                        <div id="webhookActions_collapse_@currentIndex" class="accordion-collapse collapse show">
+                            <div class="accordion-body">
+                                <strong>TODO: Implement action parameters.</strong>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
         </FormModal>
     }
 </AuthorizeView>

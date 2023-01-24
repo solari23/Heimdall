@@ -12,15 +12,12 @@ public partial class WebhookAdmin
     [Inject]
     private HttpClient Http { get; set; }
 
+    [Inject]
+    private BootstrapHelper BootstrapHelper { get; set; }
+
     private WebhookTable WebhookTable { get; set; }
 
     private FormModal<Webhook> NewWebhookModal { get; set; }
-
-    public void ShowNewWebhookForm()
-    {
-        this.NewWebhookModal.Clear();
-        this.NewWebhookModal.Open();
-    }
 
     private async Task CreateWebhookAsync(Webhook newDevice)
     {
@@ -36,5 +33,24 @@ public partial class WebhookAdmin
         {
             exception.Redirect();
         }
+    }
+
+    private void AddWebhookAction()
+    {
+        this.NewWebhookModal.Model.Actions.Add(new ToggleSwitchAction
+        {
+            TargetDeviceId = "???",
+        });
+        this.StateHasChanged();
+    }
+
+    private Webhook CreateNewWebhookModel()
+    {
+        var webhook = new Webhook();
+        webhook.Actions.Add(new ToggleSwitchAction
+        {
+            TargetDeviceId = "YayBaz",
+        });
+        return webhook;
     }
 }

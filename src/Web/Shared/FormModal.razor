@@ -49,17 +49,27 @@
     [Parameter]
     public Func<TModel, Task> AsyncSaveDelegate { get; set; }
 
+    [Parameter]
+    public Func<TModel> CreateNewModelObjectDelegate { get; set; }
+
     public TModel Model { get; set; } = new();
 
     private bool isOpen = false;
 
     public void Clear()
     {
-        this.Model = new();
+        this.Model = this.CreateNewModelObjectDelegate is not null
+            ? this.CreateNewModelObjectDelegate()
+            : new();
     }
 
-    public void Open()
+    public void Open(bool clearModel = true)
     {
+        if (clearModel)
+        {
+            this.Clear();
+        }
+
         this.isOpen = true;
         this.StateHasChanged();
     }
