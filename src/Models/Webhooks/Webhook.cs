@@ -13,5 +13,6 @@ public record Webhook
     public string Name { get; set; }
 
     [Required]
+    [CollectionNotEmpty]
     public List<IAction> Actions { get; set; } = new();
 }

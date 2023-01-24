@@ -48,13 +48,9 @@ public partial class WebhookAdmin
         this.StateHasChanged();
     }
 
-    private Webhook CreateNewWebhookModel()
+    private void DeleteWebhookAction(int index)
     {
-        var webhook = new Webhook();
-        webhook.Actions.Add(new ToggleSwitchAction
-        {
-            TargetDeviceId = "YayBaz",
-        });
-        return webhook;
+        this.NewWebhookModal.Model.Actions.RemoveAt(index);
+        this.StateHasChanged();
     }
 }

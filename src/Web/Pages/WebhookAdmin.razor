@@ -29,8 +29,7 @@
         <FormModal @ref="NewWebhookModal"
                    TModel="Webhook"
                    FormTitle="New Webhook"
-                   AsyncSaveDelegate="this.CreateWebhookAsync"
-                   CreateNewModelObjectDelegate="this.CreateNewWebhookModel">
+                   AsyncSaveDelegate="this.CreateWebhookAsync">
 
             <div class="form-floating row mb-4">
                 <InputText id="newWebhookName"
@@ -67,6 +66,7 @@
                     </ul>
                 </div>
             </div>
+            <ValidationMessage For="@(() => this.NewWebhookModal.Model.Actions)" />
             <div class="accordion row" id="webhookActionsAccordion">
                 @for (int i = 0; i < this.NewWebhookModal.Model.Actions.Count; i++)
                 {
@@ -86,7 +86,28 @@
                         </h2>
                         <div id="webhookActions_collapse_@currentIndex" class="accordion-collapse collapse show">
                             <div class="accordion-body">
-                                <strong>TODO: Implement action parameters.</strong>
+                                <div class="row justify-content-end">
+                                    <div class="col-1 mb-2">
+                                        <button class="btn btn-outline-secondary btn-sm" type="button" @onclick='() => this.DeleteWebhookAction(currentIndex)'>X</button>
+                                    </div>
+                                </div>
+
+                                @if (currentAction is ToggleSwitchAction toggleSwitchAction)
+                                {
+                                    <div class="form-floating row mb-4">
+                                        <InputText id='@($"ts_action_{currentIndex}_sid")'
+                                                   class="form-control"
+                                                   placeholder="Switch ID"
+                                                   @bind-Value="toggleSwitchAction.TargetDeviceId" />
+                                        <label for="ts_action_@(currentIndex)_sid">Switch ID</label>
+                                        <ValidationMessage For="@(() => toggleSwitchAction.TargetDeviceId)" />
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div><strong>UI for action of type '@currentAction.GetType().Name' not implemented.</strong></div>
+                                }
+
                             </div>
                         </div>
                     </div>
