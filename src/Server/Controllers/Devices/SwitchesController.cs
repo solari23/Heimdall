@@ -114,4 +114,21 @@ public class SwitchesController : Controller
 
         return this.Ok();
     }
+
+    [HttpGet("{switchId}/Toggle")]
+    [HeimdallRoleAuthorize(HeimdallRole.HomeAdmin)]
+    public async Task<IActionResult> ToggleAsync(string switchId)
+    {
+        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
+
+        if (!queryResult.WasFound)
+        {
+            return this.NotFound();
+        }
+
+        var switchController = this.DeviceControllerFactory.GetSwitchController(queryResult.Data);
+        await switchController.ToggleAsync();
+
+        return this.Ok();
+    }
 }

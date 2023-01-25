@@ -34,6 +34,11 @@ public class ShellyDeviceController : ISwitchController
         await this.Client.SetSwitchAsync(this.GetDeviceUri(), setOn: false, cancellationToken: ct);
     }
 
+    public async Task ToggleAsync(CancellationToken ct = default)
+    {
+        await this.Client.ToggleSwitchAsync(this.GetDeviceUri(), cancellationToken: ct);
+    }
+
     private Uri GetDeviceUri()
     {
         var builder = new UriBuilder();

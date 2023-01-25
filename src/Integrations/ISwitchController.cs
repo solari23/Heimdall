@@ -12,4 +12,6 @@ public interface ISwitchController
     Task TurnOnAsync(CancellationToken ct = default);
 
     Task TurnOffAsync(CancellationToken ct = default);
+
+    Task ToggleAsync(CancellationToken ct = default);
 }
