@@ -26,7 +26,7 @@ else
                         {
                             // This method will usually complete synchronously so
                             // waiting for the result shouldn't impact the UI.
-                            <p>@(this.GetActionDisplayStringAsync(action).GetAwaiter().GetResult())</p>
+                            <p>@this.GetActionDisplayString(action)</p>
                         }
                     </td>
                     <td>

@@ -1,7 +1,11 @@
-﻿using System.Net.Http.Json;
+﻿// Copyright (c) Alexandre Kerametlian.
+// Licensed under the Apache License, Version 2.0.
+
+using System.Net.Http.Json;
+
 using Heimdall.Models;
-using Heimdall.Models.Requests;
 using Heimdall.Models.Webhooks;
+using Heimdall.Web.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.JSInterop;
@@ -19,12 +23,20 @@ public partial class WebhookTable
     [Inject]
     private IConfiguration Config { get; set; }
 
+    [Inject]
+    private DeviceRepository DeviceRepository { get; set; }
+
     private List<Webhook> webhooks;
+
+    private IReadOnlyDictionary<string, string> deviceIdToNameMapping = new Dictionary<string, string>();
 
     public async Task ResetAsync()
     {
         try
         {
+            this.deviceIdToNameMapping
+                = await this.DeviceRepository.GetDeviceIdToNameMappingAsync();
+
             this.webhooks = null;
             this.StateHasChanged();
 
@@ -74,12 +86,18 @@ public partial class WebhookTable
         }
     }
 
-    private async Task<string> GetActionDisplayStringAsync(IAction action)
+    private string GetActionDisplayString(IAction action)
     {
         if (action is ToggleSwitchAction toggleSwitchAction)
         {
-            // TODO: Resolve the device ID to friendly name.
-            return $"Toggle switch '{toggleSwitchAction.TargetDeviceId}'";
+            if (!this.deviceIdToNameMapping.TryGetValue(
+                toggleSwitchAction.TargetDeviceId,
+                out var targetDeviceFriendlyName))
+            {
+                targetDeviceFriendlyName = toggleSwitchAction.TargetDeviceId;
+            }
+
+            return $"Toggle switch '{targetDeviceFriendlyName}'";
         }
         else
         {

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using System.Linq;
 using System.Net.Http.Json;
 
 using Heimdall.Models;
@@ -29,6 +30,23 @@ public class DeviceRepository
         }
 
         return devices;
+    }
+
+    public async Task<IReadOnlyDictionary<string, string>> GetDeviceIdToNameMappingAsync()
+    {
+        var devices = await this.devicesCache.GetAsync(this.ApiClient);
+
+        var mapping = new Dictionary<string, string>();
+
+        if (devices is not null)
+        {
+            foreach (var device in devices)
+            {
+                mapping.Add(device.Id, device.Name);
+            }
+        }
+
+        return mapping;
     }
 
     private class DevicesCache
