@@ -60,6 +60,7 @@ public class Program
         builder.Services.Configure<SqliteStorageAccessOptions>(
             builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
         builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
+        builder.Services.AddSingleton<ActionProcessor>();
 
         var app = builder.Build();
         app.MapControllers();

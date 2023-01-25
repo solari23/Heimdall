@@ -11,21 +11,30 @@ namespace Heimdall.WebhookProxy.Controllers;
 public class WebhookController : Controller
 {
     public WebhookController(
-        IHttpClientFactory httpClientFactory,
+        ActionProcessor actionProcessor,
         IStorageAccess storageAccess)
     {
-        this.HttpClient = httpClientFactory.CreateClient(Program.HeimdallApiHttpClientName);
+        this.ActionProcessor = actionProcessor;
         this.StorageAccess = storageAccess;
     }
 
-    private HttpClient HttpClient { get; }
+    private ActionProcessor ActionProcessor { get; }
 
     private IStorageAccess StorageAccess { get; }
 
     [HttpGet("{webhookId}")]
     public async Task<IActionResult> GetAsync(string webhookId)
     {
-        await Task.Yield();
+        var queryResult = await this.StorageAccess.GetWebhookByIdAsync(webhookId);
+
+        if (!queryResult.WasFound)
+        {
+            return this.NotFound();
+        }
+
+        var webhookDefinition = queryResult.Data;
+
+        await this.ActionProcessor.ExecuteActionsAsync(webhookDefinition.Actions);
         return this.Ok($"You have called webhook {webhookId}");
     }
 }
