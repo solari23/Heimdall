@@ -8,7 +8,7 @@
     @if (!context.User.HasDeviceAdminAccess())
     {
         <div class="alert alert-warning" role="alert">
-            &#9888;&#65039; You don't have access to manage devices.
+            &#9888;&#65039; You don't have access to manage webhooks.
         </div>
     }
     else
@@ -95,11 +95,12 @@
                                 @if (currentAction is ToggleSwitchAction toggleSwitchAction)
                                 {
                                     <div class="form-floating row mb-4">
-                                        <InputText id='@($"ts_action_{currentIndex}_sid")'
-                                                   class="form-control"
-                                                   placeholder="Switch ID"
-                                                   @bind-Value="toggleSwitchAction.TargetDeviceId" />
-                                        <label for="ts_action_@(currentIndex)_sid">Switch ID</label>
+                                        <DevicePicker id='@($"ts_action_{currentIndex}_sid")'
+                                                      class="form-control"
+                                                      placeholder="Choose Switch"
+                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug })"
+                                                      @bind-Value="toggleSwitchAction.TargetDeviceId"/>
+                                        <label for="ts_action_@(currentIndex)_sid">Choose Switch</label>
                                         <ValidationMessage For="@(() => toggleSwitchAction.TargetDeviceId)" />
                                     </div>
                                 }

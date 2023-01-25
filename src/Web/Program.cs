@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Components.Web;
+﻿using Heimdall.Web.Services;
+using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -6,6 +7,8 @@ namespace Heimdall.Web;
 
 public static class Program
 {
+    public const string HeimdallApiHttpClientName = "Heimdall.ServerAPI";
+
     public static async Task Main(string[] args)
     {
         var builder = WebAssemblyHostBuilder.CreateDefault(args);
@@ -13,7 +16,7 @@ public static class Program
         builder.RootComponents.Add<HeadOutlet>("head::after");
 
         builder.Services.AddHttpClient(
-            "Heimdall.ServerAPI",
+            HeimdallApiHttpClientName,
             client => client.BaseAddress = new Uri(builder.HostEnvironment.BaseAddress))
             .AddHttpMessageHandler<BaseAddressAuthorizationMessageHandler>();
 
@@ -29,6 +32,7 @@ public static class Program
         }).AddAccountClaimsPrincipalFactory<HeimdallClaimsPrincipalFactory>();
 
         builder.Services.AddTransient<BootstrapHelper>();
+        builder.Services.AddSingleton<DeviceRepository>();
 
         await builder.Build().RunAsync();
     }
