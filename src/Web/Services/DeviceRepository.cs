@@ -18,7 +18,7 @@ public class DeviceRepository
 
     private DevicesCache devicesCache { get; } = new();
 
-    public async Task<IReadOnlyCollection<Device>> GetDevicesAsync(
+    public async Task<IReadOnlyList<Device>> GetDevicesAsync(
         IReadOnlyCollection<DeviceType> deviceTypeFilter = null)
     {
         var devices = await this.devicesCache.GetAsync(this.ApiClient);
@@ -39,7 +39,7 @@ public class DeviceRepository
         private DateTimeOffset lastUpdateTime = default;
         private SemaphoreSlim refreshLock = new SemaphoreSlim(1);
 
-        public async Task<IReadOnlyCollection<Device>> GetAsync(HttpClient apiClient)
+        public async Task<IReadOnlyList<Device>> GetAsync(HttpClient apiClient)
         {
             if (this.IsCacheStale())
             {

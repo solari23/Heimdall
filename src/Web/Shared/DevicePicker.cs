@@ -17,7 +17,7 @@ public sealed class DevicePicker : InputSelect<string>
     [Inject]
     private DeviceRepository DeviceRepository { get; set; }
 
-    private IReadOnlyCollection<Device> devices = null;
+    private IReadOnlyList<Device> devices = null;
 
     protected override async Task OnInitializedAsync()
     {
@@ -30,7 +30,7 @@ public sealed class DevicePicker : InputSelect<string>
     {
         this.ChildContent = null;
 
-        if (this.devices is not null)
+        if (this.devices is not null && this.devices.Count > 0)
         {
             this.ChildContent = optionsBuilder =>
             {
@@ -42,6 +42,11 @@ public sealed class DevicePicker : InputSelect<string>
                     optionsBuilder.CloseElement();
                 }
             };
+
+            if (this.CurrentValue is null)
+            {
+                this.CurrentValue = this.devices[0].Id;
+            }
         }
 
         base.BuildRenderTree(builder);
