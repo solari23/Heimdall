@@ -74,14 +74,15 @@ public partial class SqliteStorageAccess
         await command.ExecuteNonQueryAsync();
     }
 
-    public async Task DeleteDeviceAsync(string deviceId)
+    public async Task<bool> DeleteDeviceAsync(string deviceId)
     {
         var command = this.Connection.Value.CreateCommand();
         command.CommandText = DeviceDeletionCommand;
 
         command.Parameters.AddWithValue($"${nameof(Device.Id)}", deviceId);
 
-        await command.ExecuteNonQueryAsync();
+        int rowsAffected = await command.ExecuteNonQueryAsync();
+        return rowsAffected > 0;
     }
 
     private static Device ReadDeviceObject(SqliteDataReader reader)

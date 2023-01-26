@@ -51,7 +51,7 @@ public class DevicesAdminController : Controller
     [HttpDelete("{deviceId}")]
     public async Task<IActionResult> DeleteAsync(string deviceId)
     {
-        await this.StorageAccess.DeleteDeviceAsync(deviceId);
-        return this.Ok();
+        bool rowDeleted = await this.StorageAccess.DeleteDeviceAsync(deviceId);
+        return rowDeleted ? this.Ok() : this.NotFound();
     }
 }

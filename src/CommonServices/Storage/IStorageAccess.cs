@@ -16,7 +16,7 @@ public interface IStorageAccess
 
     Task AddDeviceAsync(Device device);
 
-    Task DeleteDeviceAsync(string deviceId);
+    Task<bool> DeleteDeviceAsync(string deviceId);
 
     Task<QueryResult<Webhook>> GetWebhookByIdAsync(string webhookId, CancellationToken ct = default);
 
@@ -24,5 +24,7 @@ public interface IStorageAccess
 
     Task AddWebhookAsync(Webhook webhook);
 
-    Task DeleteWebhookAsync(string webhookId);
+    Task<bool> UpdateWebhookAsync(Webhook webhook);
+
+    Task<bool> DeleteWebhookAsync(string webhookId);
 }

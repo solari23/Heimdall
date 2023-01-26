@@ -22,6 +22,12 @@ public partial class SqliteStorageAccess
             ${nameof(Webhook.Name)},
             ${nameof(Webhook.Actions)})";
 
+    private const string WebhookUpdateCommand = $@"
+        UPDATE Webhooks
+        SET Name = ${nameof(Webhook.Id)},
+            Actions = ${nameof(Webhook.Actions)}
+        WHERE Id = ${nameof(Webhook.Id)}";
+
     private const string WebhookDeletionCommand = $"DELETE FROM Webhooks WHERE Id = ${nameof(Webhook.Id)}";
 
     public async Task<QueryResult<Webhook>> GetWebhookByIdAsync(string webhookId, CancellationToken ct = default)
@@ -56,26 +62,30 @@ public partial class SqliteStorageAccess
     {
         var command = this.Connection.Value.CreateCommand();
         command.CommandText = WebhookCreationCommand;
-
-        command.Parameters.AddWithValue($"${nameof(Webhook.Id)}", webhook.Id);
-        command.Parameters.AddWithValue($"${nameof(Webhook.Name)}", webhook.Name);
-
-        var actionsJson = JsonSerializer.Serialize(
-            webhook.Actions,
-            JsonHelpers.DefaultJsonOptions);
-        command.Parameters.AddWithValue($"${nameof(Webhook.Actions)}", actionsJson);
+        ParameterizeWebhook(command.Parameters, webhook);
 
         await command.ExecuteNonQueryAsync();
     }
 
-    public async Task DeleteWebhookAsync(string webhookId)
+    public async Task<bool> UpdateWebhookAsync(Webhook webhook)
+    {
+        var command = this.Connection.Value.CreateCommand();
+        command.CommandText = WebhookUpdateCommand;
+        ParameterizeWebhook(command.Parameters, webhook);
+
+        int rowsAffected = await command.ExecuteNonQueryAsync();
+        return rowsAffected > 0;
+    }
+
+    public async Task<bool> DeleteWebhookAsync(string webhookId)
     {
         var command = this.Connection.Value.CreateCommand();
         command.CommandText = WebhookDeletionCommand;
 
         command.Parameters.AddWithValue($"${nameof(Webhook.Id)}", webhookId);
 
-        await command.ExecuteNonQueryAsync();
+        int rowsAffected = await command.ExecuteNonQueryAsync();
+        return rowsAffected > 0;
     }
 
     private static Webhook ReadWebhookObject(SqliteDataReader reader)
@@ -85,4 +95,15 @@ public partial class SqliteStorageAccess
             Name = reader.GetString(1),
             Actions = JsonSerializer.Deserialize<List<IAction>>(reader.GetString(2), JsonHelpers.DefaultJsonOptions),
         };
+
+    private static void ParameterizeWebhook(SqliteParameterCollection parameters, Webhook webhook)
+    {
+        parameters.AddWithValue($"${nameof(Webhook.Id)}", webhook.Id);
+        parameters.AddWithValue($"${nameof(Webhook.Name)}", webhook.Name);
+
+        var actionsJson = JsonSerializer.Serialize(
+            webhook.Actions,
+            JsonHelpers.DefaultJsonOptions);
+        parameters.AddWithValue($"${nameof(Webhook.Actions)}", actionsJson);
+    }
 }

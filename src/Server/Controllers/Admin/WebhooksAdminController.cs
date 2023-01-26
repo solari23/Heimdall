@@ -51,10 +51,22 @@ public class WebhooksAdminController : Controller
         return this.Ok(newWebhook);
     }
 
+    [HttpPut("{webhookId}")]
+    public async Task<IActionResult> UpdateAsync(string webhookId, [FromBody] Webhook webhookToUpdate)
+    {
+        if (webhookId != webhookToUpdate.Id)
+        {
+            return this.BadRequest();
+        }
+
+        bool rowUpdated = await this.StorageAccess.UpdateWebhookAsync(webhookToUpdate);
+        return rowUpdated ? this.Ok() : this.NotFound();
+    }
+
     [HttpDelete("{webhookId}")]
     public async Task<IActionResult> DeleteAsync(string webhookId)
     {
-        await this.StorageAccess.DeleteWebhookAsync(webhookId);
-        return this.Ok();
+        bool rowDeleted = await this.StorageAccess.DeleteWebhookAsync(webhookId);
+        return rowDeleted ? this.Ok() : this.NotFound();
     }
 }
