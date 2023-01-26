@@ -9,7 +9,6 @@ else
     <table class="table table-striped table-hover table-bordered">
         <thead class="table-dark">
             <tr>
-                <th scope="col" class="fit">Id</th>
                 <th scope="col">Name</th>
                 <th scope="col">Action(s)</th>
                 <th scope="col" class="fit"><!-- Empty --></th>
@@ -19,7 +18,6 @@ else
             @foreach (var webhook in this.webhooks)
             {
                 <tr>
-                    <td>@webhook.Id</td>
                     <td>@webhook.Name</td>
                     <td>
                         @foreach (var action in webhook.Actions)

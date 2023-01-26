@@ -14,15 +14,25 @@ public class BootstrapHelper
 
     private IJSRuntime JSRuntime { get; }
 
-    public void ToggleCollapse(string collapseElementId, string toggleButtonElementId = null)
+    public async Task ToggleCollapseAsync(string groupTag, string collapseElementId, string toggleButtonElementId = null)
     {
         if (toggleButtonElementId is not null)
         {
-            this.JSRuntime.InvokeVoidAsync(
+            await this.JSRuntime.InvokeVoidAsync(
                 "BootstrapHelper_ToggleClassOnElement",
                 toggleButtonElementId,
                 "collapsed");
         }
-        this.JSRuntime.InvokeVoidAsync("BootstrapHelper_ToggleCollapse", collapseElementId);
+        await this.JSRuntime.InvokeVoidAsync("BootstrapHelper_ToggleCollapse", groupTag, collapseElementId);
+    }
+
+    public async Task ReleaseCollapseAsync(string groupTag, string elementId)
+    {
+        await this.JSRuntime.InvokeVoidAsync("BootstrapHelper_ReleaseCollapse", groupTag, elementId);
+    }
+
+    public async Task ReleaseCollapseGroupAsync(string groupTag)
+    {
+        await this.JSRuntime.InvokeVoidAsync("BootstrapHelper_ReleaseCollapseGroup", groupTag);
     }
 }

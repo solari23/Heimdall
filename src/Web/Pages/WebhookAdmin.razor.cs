@@ -9,6 +9,9 @@ namespace Heimdall.Web.Pages;
 
 public partial class WebhookAdmin
 {
+    private const string ModalCollapseGroupTag = "WH_ADMIN_MODAL_GRP";
+    private static string ModalCollapseElementIdForIndex(int index) => $"webhookActions_collapse_{index}";
+
     [Inject]
     private HttpClient Http { get; set; }
 
@@ -48,9 +51,13 @@ public partial class WebhookAdmin
         this.StateHasChanged();
     }
 
-    private void DeleteWebhookAction(int index)
+    private async Task DeleteWebhookActionAsync(int index)
     {
         this.NewWebhookModal.Model.Actions.RemoveAt(index);
+        await this.BootstrapHelper.ReleaseCollapseAsync(
+            ModalCollapseGroupTag,
+            ModalCollapseElementIdForIndex(index));
+
         this.StateHasChanged();
     }
 }

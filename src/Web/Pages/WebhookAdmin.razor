@@ -29,8 +29,8 @@
         <FormModal @ref="NewWebhookModal"
                    TModel="Webhook"
                    FormTitle="New Webhook"
+                   OnClose='async () => await this.BootstrapHelper.ReleaseCollapseGroupAsync(ModalCollapseGroupTag)'
                    AsyncSaveDelegate="this.CreateWebhookAsync">
-
             <div class="form-floating row mb-4">
                 <InputText id="newWebhookName"
                            class="form-control"
@@ -44,7 +44,7 @@
                 <div class="col-3">
                     <h5>Actions</h5>
                 </div>
-                <div class="dropdown col-3 ps-4">
+                <div class="dropdown col-4 text-end">
                     <button class="btn btn-primary btn-sm dropdown-toggle"
                             type="button"
                             id="newWebhookActionDropdown"
@@ -78,17 +78,18 @@
                             <button class="accordion-button"
                                     type="button"
                                     id="webhookActions_toggleCollapseButton_@currentIndex"
-                                    @onclick='() => this.BootstrapHelper.ToggleCollapse(
-                                        $"webhookActions_collapse_{currentIndex}",
+                                    @onclick='async () => await this.BootstrapHelper.ToggleCollapseAsync(
+                                        ModalCollapseGroupTag,
+                                        ModalCollapseElementIdForIndex(currentIndex),
                                         $"webhookActions_toggleCollapseButton_{currentIndex}")'>
                                 @(EnumUtil<ActionKind>.ToPrettyString(currentAction.ActionKind))
                             </button>
                         </h2>
-                        <div id="webhookActions_collapse_@currentIndex" class="accordion-collapse collapse show">
+                        <div id="@ModalCollapseElementIdForIndex(currentIndex)" class="accordion-collapse collapse show">
                             <div class="accordion-body">
                                 <div class="row justify-content-end">
                                     <div class="col-1 mb-2">
-                                        <button class="btn btn-outline-secondary btn-sm" type="button" @onclick='() => this.DeleteWebhookAction(currentIndex)'>X</button>
+                                        <button class="btn btn-outline-secondary btn-sm" type="button" @onclick='async () => await this.DeleteWebhookActionAsync(currentIndex)'>X</button>
                                     </div>
                                 </div>
 
@@ -114,7 +115,6 @@
                     </div>
                 }
             </div>
-
         </FormModal>
     }
 </AuthorizeView>

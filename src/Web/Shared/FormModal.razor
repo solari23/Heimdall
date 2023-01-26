@@ -12,7 +12,7 @@
                 <button type="button"
                         class="btn-close" 
                         aria-label="Close"
-                        @onclick="this.Close" />
+                        @onclick="this.CloseAsync" />
             </div>
             
             <EditForm Model="this.Model"
@@ -26,7 +26,7 @@
 
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" @onclick="this.Close">Cancel</button>
+                    <button type="button" class="btn btn-secondary" @onclick="this.CloseAsync">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </EditForm>
@@ -52,6 +52,9 @@
     [Parameter]
     public Func<TModel> CreateNewModelObjectDelegate { get; set; }
 
+    [Parameter]
+    public EventCallback OnClose { get; set; }
+
     public TModel Model { get; set; } = new();
 
     private bool isOpen = false;
@@ -74,8 +77,13 @@
         this.StateHasChanged();
     }
 
-    public void Close()
+    public async Task CloseAsync()
     {
+        if (this.OnClose.HasDelegate)
+        {
+            await this.OnClose.InvokeAsync();
+        }
+
         this.isOpen = false;
         this.StateHasChanged();
     }
@@ -84,6 +92,6 @@
     {
         await this.AsyncSaveDelegate(this.Model);
         this.Clear();
-        this.Close();
+        await this.CloseAsync();
     }
 }
