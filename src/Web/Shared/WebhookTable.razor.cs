@@ -26,14 +26,20 @@ public partial class WebhookTable
     [Inject]
     private DeviceRepository DeviceRepository { get; set; }
 
+    [Parameter]
+    public Action<Webhook> EditUIDelegate { get; set; }
+
     private List<Webhook> webhooks;
 
     private IReadOnlyDictionary<string, string> deviceIdToNameMapping = new Dictionary<string, string>();
+
+    private bool allowRendering = true;
 
     public async Task ResetAsync()
     {
         try
         {
+            this.allowRendering = true;
             this.deviceIdToNameMapping
                 = await this.DeviceRepository.GetDeviceIdToNameMappingAsync();
 
@@ -54,6 +60,16 @@ public partial class WebhookTable
     protected async override Task OnInitializedAsync()
     {
         await this.ResetAsync();
+    }
+
+    protected override bool ShouldRender() => this.allowRendering;
+
+    private void ShowEditUI(Webhook webhook)
+    {
+        // Pause rendering the table.
+        // Caller's responsibility to re-enable via Reset when editing is done.
+        this.allowRendering = false;
+        this.EditUIDelegate(webhook);
     }
 
     private async Task CopyWebhookUriToClipboardAsync(Webhook webhook)

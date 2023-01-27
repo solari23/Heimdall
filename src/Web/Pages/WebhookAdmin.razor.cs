@@ -20,17 +20,34 @@ public partial class WebhookAdmin
 
     private WebhookTable WebhookTable { get; set; }
 
-    private FormModal<Webhook> NewWebhookModal { get; set; }
+    private FormModal<Webhook> WebhookEditModal { get; set; }
 
-    private async Task CreateWebhookAsync(Webhook newDevice)
+    private async Task OnWebhookFormModalCloseAsync()
+    {
+        await this.BootstrapHelper.ReleaseCollapseGroupAsync(ModalCollapseGroupTag);
+        await this.WebhookTable.ResetAsync();
+    }
+
+    private async Task CreateOrUpdateWebhookAsync(Webhook webhook)
     {
         try
         {
-            await this.Http.PostAsJsonAsync<Webhook>(
-                $"api/admin/webhooks",
-                newDevice,
-                options: JsonHelpers.DefaultJsonOptions);
-            await this.WebhookTable.ResetAsync();
+            if (webhook.Id is null)
+            {
+                // Create it.
+                await this.Http.PostAsJsonAsync<Webhook>(
+                    $"api/admin/webhooks",
+                    webhook,
+                    options: JsonHelpers.DefaultJsonOptions);
+            }
+            else
+            {
+                // Update it.
+                await this.Http.PutAsJsonAsync<Webhook>(
+                    $"api/admin/webhooks/{webhook.Id}",
+                    webhook,
+                    options: JsonHelpers.DefaultJsonOptions);
+            }
         }
         catch (AccessTokenNotAvailableException exception)
         {
@@ -47,13 +64,13 @@ public partial class WebhookAdmin
                 $"Don't know how to render UI for action kind '{actionKind}'"),
         };
 
-        this.NewWebhookModal.Model.Actions.Add(newAction);
+        this.WebhookEditModal.Model.Actions.Add(newAction);
         this.StateHasChanged();
     }
 
     private async Task DeleteWebhookActionAsync(int index)
     {
-        this.NewWebhookModal.Model.Actions.RemoveAt(index);
+        this.WebhookEditModal.Model.Actions.RemoveAt(index);
         await this.BootstrapHelper.ReleaseCollapseAsync(
             ModalCollapseGroupTag,
             ModalCollapseElementIdForIndex(index));

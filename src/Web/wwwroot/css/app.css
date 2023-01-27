@@ -19,6 +19,14 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+.subtle-delete-button {
+    color: #6c757d70;
+}
+
+    .subtle-delete-button:hover {
+        color: #dc3545ff;
+    }
+
 .content {
     padding-top: 1.1rem;
 }

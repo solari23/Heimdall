@@ -66,12 +66,30 @@
             : new();
     }
 
+    /// <summary>
+    /// Opens the form.
+    /// </summary>
+    /// <param name="clearModel">
+    /// Whether or not to clear existing model data from the form.
+    /// </param>
     public void Open(bool clearModel = true)
     {
         if (clearModel)
         {
             this.Clear();
         }
+
+        this.isOpen = true;
+        this.StateHasChanged();
+    }
+
+    /// <summary>
+    /// Opens the form to edit the given existing model.
+    /// </summary>
+    /// <param name="model">The model to edit.</param>
+    public void Open(TModel model)
+    {
+        this.Model = model;
 
         this.isOpen = true;
         this.StateHasChanged();

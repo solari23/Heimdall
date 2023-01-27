@@ -16,28 +16,28 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-9 justify-content-start">
-                    <WebhookTable @ref="WebhookTable" />
+                    <WebhookTable @ref="WebhookTable" EditUIDelegate='(webhook) => this.WebhookEditModal.Open(webhook)' />
                 </div>
             </div>
             <div class="row">
                 <div class="col">
-                    <button class="btn btn-primary" @onclick="() => this.NewWebhookModal.Open()">+ Add</button>
+                    <button class="btn btn-primary" @onclick="() => this.WebhookEditModal.Open()">+ Add</button>
                 </div>
             </div>
         </div>
 
-        <FormModal @ref="NewWebhookModal"
+        <FormModal @ref="WebhookEditModal"
                    TModel="Webhook"
                    FormTitle="New Webhook"
-                   OnClose='async () => await this.BootstrapHelper.ReleaseCollapseGroupAsync(ModalCollapseGroupTag)'
-                   AsyncSaveDelegate="this.CreateWebhookAsync">
+                   OnClose='this.OnWebhookFormModalCloseAsync'
+                   AsyncSaveDelegate="this.CreateOrUpdateWebhookAsync">
             <div class="form-floating row mb-4">
                 <InputText id="newWebhookName"
                            class="form-control"
                            placeholder="Webhook Name"
-                           @bind-Value="this.NewWebhookModal.Model.Name" />
+                           @bind-Value="this.WebhookEditModal.Model.Name" />
                 <label for="newDeviceName">Webhook Name</label>
-                <ValidationMessage For="@(() => this.NewWebhookModal.Model.Name)" />
+                <ValidationMessage For="@(() => this.WebhookEditModal.Model.Name)" />
             </div>
 
             <div class="row justify-content-between mb-2">
@@ -66,12 +66,12 @@
                     </ul>
                 </div>
             </div>
-            <ValidationMessage For="@(() => this.NewWebhookModal.Model.Actions)" />
+            <ValidationMessage For="@(() => this.WebhookEditModal.Model.Actions)" />
             <div class="accordion row" id="webhookActionsAccordion">
-                @for (int i = 0; i < this.NewWebhookModal.Model.Actions.Count; i++)
+                @for (int i = 0; i < this.WebhookEditModal.Model.Actions.Count; i++)
                 {
                     int currentIndex = i;
-                    IAction currentAction = this.NewWebhookModal.Model.Actions[i];
+                    IAction currentAction = this.WebhookEditModal.Model.Actions[i];
 
                     <div class="accordion-item">
                         <h2 class="accordion-header">

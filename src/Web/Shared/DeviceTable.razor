@@ -26,7 +26,7 @@ else
                     <td>@device.HostOrIPAddress</td>
                     <td>
                         <button type="button" 
-                                class="btn btn-outline-secondary oi oi-trash"
+                                class="btn btn-outline-secondary oi oi-trash subtle-delete-button"
                                 aria-label="delete"
                                 @onclick=@(async () => await this.ConfirmAndDeleteDeviceAsync(device)) />
                     </td>

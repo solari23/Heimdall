@@ -24,7 +24,7 @@ public partial class SqliteStorageAccess
 
     private const string WebhookUpdateCommand = $@"
         UPDATE Webhooks
-        SET Name = ${nameof(Webhook.Id)},
+        SET Name = ${nameof(Webhook.Name)},
             Actions = ${nameof(Webhook.Actions)}
         WHERE Id = ${nameof(Webhook.Id)}";
 

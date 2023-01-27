@@ -28,14 +28,34 @@ else
                         }
                     </td>
                     <td>
-                        <button type="button" 
-                                class="btn btn-outline-secondary oi oi-clipboard"
-                                aria-label="copy to clipboard"
-                                @onclick=@(async () => await this.CopyWebhookUriToClipboardAsync(webhook)) />
-                        <button type="button" 
-                                class="btn btn-outline-secondary oi oi-trash"
-                                aria-label="delete"
-                                @onclick=@(async () => await this.ConfirmAndDeleteWebhookAsync(webhook)) />
+                        <table>
+                            <tr>
+                                <td>
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary oi oi-pencil"
+                                            aria-label="Edit Webhook"
+                                            title="Edit"
+                                            @onclick=@(() => this.ShowEditUI(webhook)) />
+                                </td>
+                                <td>
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary oi oi-clipboard"
+                                            aria-label="Copy Webhook URI to Clipboard"
+                                            title="Copy URI"
+                                            @onclick=@(async () => await this.CopyWebhookUriToClipboardAsync(webhook)) />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td />
+                                <td>
+                                    <button type="button" 
+                                            class="btn btn-outline-secondary oi oi-trash subtle-delete-button"
+                                            aria-label="Delete Webhook"
+                                            title="Delete"
+                                            @onclick=@(async () => await this.ConfirmAndDeleteWebhookAsync(webhook)) />
+                                </td>
+                            </tr>
+                        </table>
                     </td>
                 </tr>
             }
