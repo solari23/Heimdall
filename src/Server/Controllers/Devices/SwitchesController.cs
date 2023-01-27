@@ -21,21 +21,21 @@ public class SwitchesController : Controller
 {
     public SwitchesController(
         IDeviceControllerFactory deviceControllerFactory,
-        IStorageAccess storageAccess)
+        IMainStorageAccess mainStorage)
     {
         this.DeviceControllerFactory = deviceControllerFactory;
-        this.StorageAccess = storageAccess;
+        this.MainStorage = mainStorage;
     }
 
     private IDeviceControllerFactory DeviceControllerFactory { get; }
 
-    private IStorageAccess StorageAccess { get; }
+    private IMainStorageAccess MainStorage { get; }
 
     [HttpGet]
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> ListAllAsync()
     {
-        var queryResult = await this.StorageAccess.GetDevicesAsync(DeviceType.ShellyPlug);
+        var queryResult = await this.MainStorage.GetDevicesAsync(DeviceType.ShellyPlug);
 
         var switches = queryResult.WasFound
             ? queryResult.Data.Select(d =>
@@ -54,7 +54,7 @@ public class SwitchesController : Controller
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> GetAsync(string switchId)
     {
-        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
+        var queryResult = await this.MainStorage.GetDeviceByIdAsync(switchId);
 
         if (!queryResult.WasFound)
         {
@@ -89,7 +89,7 @@ public class SwitchesController : Controller
         string switchId,
         [FromBody]SetSwitchStateRequest request)
     {
-        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
+        var queryResult = await this.MainStorage.GetDeviceByIdAsync(switchId);
 
         if (!queryResult.WasFound)
         {
@@ -119,7 +119,7 @@ public class SwitchesController : Controller
     [HeimdallRoleAuthorize(HeimdallRole.HomeAdmin)]
     public async Task<IActionResult> ToggleAsync(string switchId)
     {
-        var queryResult = await this.StorageAccess.GetDeviceByIdAsync(switchId);
+        var queryResult = await this.MainStorage.GetDeviceByIdAsync(switchId);
 
         if (!queryResult.WasFound)
         {

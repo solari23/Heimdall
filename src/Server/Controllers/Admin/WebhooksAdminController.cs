@@ -18,17 +18,17 @@ namespace Heimdall.Server.Controllers.Admin;
 [HeimdallRoleAuthorize(HeimdallRole.UberAdmin)]
 public class WebhooksAdminController : Controller
 {
-    public WebhooksAdminController(IStorageAccess storageAccess)
+    public WebhooksAdminController(IMainStorageAccess mainStorage)
     {
-        this.StorageAccess = storageAccess;
+        this.MainStorage = mainStorage;
     }
 
-    private IStorageAccess StorageAccess { get; }
+    private IMainStorageAccess MainStorage { get; }
 
     [HttpGet]
     public async Task<IActionResult> ListAllAsync(CancellationToken ct)
     {
-        var webhooksQueryResult = await this.StorageAccess.GetWebhooksAsync(ct);
+        var webhooksQueryResult = await this.MainStorage.GetWebhooksAsync(ct);
 
         var webhooks = webhooksQueryResult.WasFound
             ? webhooksQueryResult.Data
@@ -44,7 +44,7 @@ public class WebhooksAdminController : Controller
         // We'll generate a new unique ID.
         var newWebhook = newWebhookRequest with { Id = IdGenerator.CreateNewId() };
 
-        await this.StorageAccess.AddWebhookAsync(newWebhook);
+        await this.MainStorage.AddWebhookAsync(newWebhook);
 
         // Technically this should return HTTP 201 'Created' with a URI to the resource.
         // We aren't fully implementing REST resources here, though.
@@ -59,14 +59,14 @@ public class WebhooksAdminController : Controller
             return this.BadRequest();
         }
 
-        bool rowUpdated = await this.StorageAccess.UpdateWebhookAsync(webhookToUpdate);
+        bool rowUpdated = await this.MainStorage.UpdateWebhookAsync(webhookToUpdate);
         return rowUpdated ? this.Ok() : this.NotFound();
     }
 
     [HttpDelete("{webhookId}")]
     public async Task<IActionResult> DeleteAsync(string webhookId)
     {
-        bool rowDeleted = await this.StorageAccess.DeleteWebhookAsync(webhookId);
+        bool rowDeleted = await this.MainStorage.DeleteWebhookAsync(webhookId);
         return rowDeleted ? this.Ok() : this.NotFound();
     }
 }

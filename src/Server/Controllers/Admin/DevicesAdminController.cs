@@ -17,17 +17,17 @@ namespace Heimdall.Server.Controllers.Admin;
 [HeimdallRoleAuthorize(HeimdallRole.UberAdmin)]
 public class DevicesAdminController : Controller
 {
-    public DevicesAdminController(IStorageAccess storageAccess)
+    public DevicesAdminController(IMainStorageAccess mainStorage)
     {
-        this.StorageAccess = storageAccess;
+        this.MainStorage = mainStorage;
     }
 
-    private IStorageAccess StorageAccess { get; }
+    private IMainStorageAccess MainStorage { get; }
 
     [HttpGet]
     public async Task<IActionResult> ListAllAsync(CancellationToken ct)
     {
-        var deviceQueryResult = await this.StorageAccess.GetDevicesAsync(ct);
+        var deviceQueryResult = await this.MainStorage.GetDevicesAsync(ct);
 
         var devices = deviceQueryResult.WasFound ? deviceQueryResult.Data : new List<Device>();
 
@@ -41,7 +41,7 @@ public class DevicesAdminController : Controller
         // We'll generate a new unique ID.
         var newDevice = newDeviceRequest with { Id = IdGenerator.CreateNewId() };
 
-        await this.StorageAccess.AddDeviceAsync(newDevice);
+        await this.MainStorage.AddDeviceAsync(newDevice);
 
         // Technically this should return HTTP 201 'Created' with a URI to the resource.
         // We aren't fully implementing REST resources here, though.
@@ -51,7 +51,7 @@ public class DevicesAdminController : Controller
     [HttpDelete("{deviceId}")]
     public async Task<IActionResult> DeleteAsync(string deviceId)
     {
-        bool rowDeleted = await this.StorageAccess.DeleteDeviceAsync(deviceId);
+        bool rowDeleted = await this.MainStorage.DeleteDeviceAsync(deviceId);
         return rowDeleted ? this.Ok() : this.NotFound();
     }
 }

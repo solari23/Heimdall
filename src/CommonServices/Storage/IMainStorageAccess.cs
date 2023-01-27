@@ -6,7 +6,7 @@ using Heimdall.Models.Webhooks;
 
 namespace Heimdall.CommonServices.Storage;
 
-public interface IStorageAccess
+public interface IMainStorageAccess
 {
     Task<QueryResult<Device>> GetDeviceByIdAsync(string deviceId, CancellationToken ct = default);
 

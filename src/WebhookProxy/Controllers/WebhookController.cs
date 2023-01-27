@@ -12,20 +12,20 @@ public class WebhookController : Controller
 {
     public WebhookController(
         ActionProcessor actionProcessor,
-        IStorageAccess storageAccess)
+        IMainStorageAccess mainStorage)
     {
         this.ActionProcessor = actionProcessor;
-        this.StorageAccess = storageAccess;
+        this.MainStorage = mainStorage;
     }
 
     private ActionProcessor ActionProcessor { get; }
 
-    private IStorageAccess StorageAccess { get; }
+    private IMainStorageAccess MainStorage { get; }
 
     [HttpGet("{webhookId}")]
     public async Task<IActionResult> GetAsync(string webhookId)
     {
-        var queryResult = await this.StorageAccess.GetWebhookByIdAsync(webhookId);
+        var queryResult = await this.MainStorage.GetWebhookByIdAsync(webhookId);
 
         if (!queryResult.WasFound)
         {

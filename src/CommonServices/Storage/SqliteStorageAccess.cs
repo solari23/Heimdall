@@ -6,7 +6,7 @@ using Microsoft.Extensions.Options;
 
 namespace Heimdall.CommonServices.Storage;
 
-public partial class SqliteStorageAccess : IStorageAccess, IDisposable
+public partial class SqliteStorageAccess : IMainStorageAccess, IDisposable
 {
     private const string TableCreationCommand = @"
         CREATE TABLE IF NOT EXISTS Devices (
