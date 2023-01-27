@@ -6,7 +6,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Heimdall.CommonServices.Storage;
 
-public partial class SqliteStorageAccess
+public partial class MainStorageAccess
 {
     private const string AllDevicesQuery = "SELECT Id, Type, Name, HostOrIPAddress FROM Devices";
 

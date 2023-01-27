@@ -9,7 +9,7 @@ using Microsoft.Data.Sqlite;
 
 namespace Heimdall.CommonServices.Storage;
 
-public partial class SqliteStorageAccess
+public partial class MainStorageAccess
 {
     private const string AllWebhooksQuery = "SELECT Id, Name, Actions FROM Webhooks";
 

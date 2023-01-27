@@ -60,7 +60,7 @@ public class Program
         builder.Services.Configure<SqliteStorageAccessOptions>(
             SqliteStorageAccessOptions.Instances.Main,
             builder.Configuration.GetSection("SqliteStorageAccess:Main"));
-        builder.Services.AddSingleton<IMainStorageAccess, SqliteStorageAccess>();
+        builder.Services.AddSingleton<IMainStorageAccess, MainStorageAccess>();
 
         builder.Services.AddSingleton<ActionProcessor>();
 

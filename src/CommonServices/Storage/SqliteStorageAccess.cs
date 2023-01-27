@@ -2,38 +2,24 @@
 // Licensed under the Apache License, Version 2.0.
 
 using Microsoft.Data.Sqlite;
-using Microsoft.Extensions.Options;
 
 namespace Heimdall.CommonServices.Storage;
 
-public partial class SqliteStorageAccess : IMainStorageAccess, IDisposable
+public abstract class SqliteStorageAccess : IDisposable
 {
-    private const string TableCreationCommand = @"
-        CREATE TABLE IF NOT EXISTS Devices (
-            Id TEXT PRIMARY KEY,
-            Type TEXT NOT NULL,
-            Name TEXT NOT NULL,
-            HostOrIPAddress TEXT NOT NULL
-        ) WITHOUT ROWID;
-
-        CREATE TABLE IF NOT EXISTS Webhooks (
-            Id TEXT PRIMARY KEY,
-            Name TEXT NOT NULL,
-            Actions TEXT NOT NULL
-        ) WITHOUT ROWID;
-    ";
-
-    public SqliteStorageAccess(IOptionsMonitor<SqliteStorageAccessOptions> options)
+    public SqliteStorageAccess(SqliteStorageAccessOptions options)
     {
-        this.Options = options.Get(SqliteStorageAccessOptions.Instances.Main);
+        this.Options = options;
         this.Connection = new Lazy<SqliteConnection>(() => this.OpenConnection());
     }
 
-    private SqliteStorageAccessOptions Options { get; }
+    protected abstract string TableCreationCommand { get; }
 
-    private Lazy<SqliteConnection> Connection { get; }
+    protected SqliteStorageAccessOptions Options { get; }
 
-    private SqliteConnection OpenConnection()
+    protected Lazy<SqliteConnection> Connection { get; }
+
+    protected SqliteConnection OpenConnection()
     {
         var connectionStringBuilder = new SqliteConnectionStringBuilder();
         connectionStringBuilder.DataSource = this.Options.DatabaseFilePath;
@@ -45,13 +31,13 @@ public partial class SqliteStorageAccess : IMainStorageAccess, IDisposable
         connection.Open();
 
         var tableCreationCommand = connection.CreateCommand();
-        tableCreationCommand.CommandText = TableCreationCommand;
+        tableCreationCommand.CommandText = this.TableCreationCommand;
         tableCreationCommand.ExecuteNonQuery();
 
         return connection;
     }
 
-    private async Task<List<T>> ExecuteQueryAsync<T>(
+    protected async Task<List<T>> ExecuteQueryAsync<T>(
         string query,
         Func<SqliteDataReader, T> objectReader,
         CancellationToken ct,
