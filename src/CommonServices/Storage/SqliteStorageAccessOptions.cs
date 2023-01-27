@@ -5,6 +5,11 @@ namespace Heimdall.CommonServices.Storage;
 
 public class SqliteStorageAccessOptions
 {
+    public static class Instances
+    {
+        public const string Main = nameof(Main);
+    }
+
     public string DatabaseFilePath { get; set; }
 
     public bool ReadOnly { get; set; } = false;

@@ -77,7 +77,8 @@ public static class Program
         builder.Services.AddTransient<IClaimsTransformation, HeimdallRolesClaimsTransformation>();
 
         builder.Services.Configure<SqliteStorageAccessOptions>(
-            builder.Configuration.GetSection(nameof(SqliteStorageAccess)));
+            SqliteStorageAccessOptions.Instances.Main,
+            builder.Configuration.GetSection("SqliteStorageAccess:Main"));
         builder.Services.AddSingleton<IStorageAccess, SqliteStorageAccess>();
 
         builder.Services.AddSingleton<ShellyClient>();

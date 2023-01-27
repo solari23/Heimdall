@@ -1,7 +1,9 @@
 {
   "SqliteStorageAccess": {
-    "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db",
-    "ReadOnly":  true
+    "Main": {
+      "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db",
+      "ReadOnly": true
+    }
   },
   "HeimdallSecretKeyFile": "/home/heimdall/storage/SecretKey",
   "HeimdallServerApiUri": "https://localhost:443",

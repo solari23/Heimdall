@@ -23,9 +23,9 @@ public partial class SqliteStorageAccess : IStorageAccess, IDisposable
         ) WITHOUT ROWID;
     ";
 
-    public SqliteStorageAccess(IOptions<SqliteStorageAccessOptions> options)
+    public SqliteStorageAccess(IOptionsMonitor<SqliteStorageAccessOptions> options)
     {
-        this.Options = options.Value;
+        this.Options = options.Get(SqliteStorageAccessOptions.Instances.Main);
         this.Connection = new Lazy<SqliteConnection>(() => this.OpenConnection());
     }
 
