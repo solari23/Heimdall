@@ -31,15 +31,12 @@
                    AsyncSaveDelegate="this.CreateDeviceAsync">
 
             <div class="form-floating row mb-4">
-                <InputSelect id="newDeviceType"
-                            class="form-select"
-                            placeholder="Device Type"
-                            @bind-Value="NewDeviceModal.Model.Type">
-                    @foreach (var possibleDeviceType in Enum.GetValues<DeviceType>().Where(v => v != DeviceType.Unknown))
-                    {
-                        <option value="@possibleDeviceType">@(EnumUtil<DeviceType>.ToPrettyString(possibleDeviceType))</option>
-                    }
-                </InputSelect>
+                <EnumValuePicker TEnum=DeviceType
+                                 ExcludeValues='new[]{ DeviceType.Unknown }'
+                                 id="newDeviceType"
+                                 class="form-select"
+                                 placeholder="Device Type"
+                                 @bind-Value="NewDeviceModal.Model.Type" />
                 <label for="newDeviceType">Device Type</label>
                 <ValidationMessage For="@(() => NewDeviceModal.Model.Type)" />
             </div>
