@@ -1,5 +1,6 @@
 ﻿@page "/webhookadmin"
 @using Heimdall.Models
+@using Heimdall.Models.Dto
 @using Heimdall.Models.Webhooks
 
 <h1 class="mb-4">Manage Webhooks</h1>
@@ -103,6 +104,28 @@
                                                       @bind-Value="toggleSwitchAction.TargetDeviceId"/>
                                         <label for="ts_action_@(currentIndex)_sid">Choose Switch</label>
                                         <ValidationMessage For="@(() => toggleSwitchAction.TargetDeviceId)" />
+                                    </div>
+                                }
+                                else if (currentAction is SetSwitchStateAction setSwitchStateAction)
+                                {
+                                    <div class="form-floating row mb-4">
+                                        <DevicePicker id='@($"ts_action_{currentIndex}_sid")'
+                                                      class="form-control"
+                                                      placeholder="Choose Switch"
+                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug })"
+                                                      @bind-Value="setSwitchStateAction.TargetDeviceId"/>
+                                        <label for="ts_action_@(currentIndex)_sid">Choose Switch</label>
+                                        <ValidationMessage For="@(() => setSwitchStateAction.TargetDeviceId)" />
+                                    </div>
+                                    <div class="form-floating row mb-4">
+                                        <EnumValuePicker TEnum=SwitchState
+                                                         ExcludeValues='new[]{ SwitchState.Unknown }'
+                                                         id='@($"ts_action_{currentIndex}_ss")'
+                                                         class="form-select"
+                                                         placeholder="Switch State"
+                                                         @bind-Value="setSwitchStateAction.State" />
+                                        <label for="ts_action_@(currentIndex)_ss">Switch State</label>
+                                        <ValidationMessage For="@(() => setSwitchStateAction.State)" />
                                     </div>
                                 }
                                 else

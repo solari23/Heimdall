@@ -6,4 +6,5 @@ namespace Heimdall.Models.Webhooks;
 public enum ActionKind
 {
     ToggleSwitch = 0,
+    SetSwitchState = 1,
 }

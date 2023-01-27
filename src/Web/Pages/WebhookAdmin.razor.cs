@@ -59,7 +59,8 @@ public partial class WebhookAdmin
     {
         var newAction = actionKind switch
         {
-            ActionKind.ToggleSwitch => new ToggleSwitchAction(),
+            ActionKind.ToggleSwitch => (IAction)new ToggleSwitchAction(),
+            ActionKind.SetSwitchState => (IAction)new SetSwitchStateAction(),
             _ => throw new NotSupportedException(
                 $"Don't know how to render UI for action kind '{actionKind}'"),
         };

@@ -1,6 +1,8 @@
 ﻿// Copyright (c) Alexandre Kerametlian.
 // Licensed under the Apache License, Version 2.0.
 
+using Heimdall.Models;
+using Heimdall.Models.Requests;
 using Heimdall.Models.Webhooks;
 
 namespace Heimdall.WebhookProxy;
@@ -31,6 +33,10 @@ public class ActionProcessor
             {
                 tasks.Add(this.ExecuteToggleSwitchActionAsync(toggleSwitchAction));
             }
+            else if (action is SetSwitchStateAction setSwitchStateAction)
+            {
+                tasks.Add(this.ExecuteSetSwitchStateActionAsync(setSwitchStateAction));
+            }
             else
             {
                 throw new NotImplementedException($"Action of type '{action.GetType().Name}' is not implemented");
@@ -43,5 +49,16 @@ public class ActionProcessor
     private async Task ExecuteToggleSwitchActionAsync(ToggleSwitchAction action)
     {
         await this.ApiClient.GetAsync($"api/devices/switches/{action.TargetDeviceId}/toggle");
+    }
+
+    private async Task ExecuteSetSwitchStateActionAsync(SetSwitchStateAction action)
+    {
+        await this.ApiClient.PostAsJsonAsync<SetSwitchStateRequest>(
+            $"api/devices/switches/{action.TargetDeviceId}/setstate",
+            new SetSwitchStateRequest
+            {
+                State = action.State,
+            },
+            options: JsonHelpers.DefaultJsonOptions);
     }
 }

@@ -29,6 +29,7 @@ public class ActionPolymorphicJsonConverter : JsonConverter<IAction>
                 return kind switch
                 {
                     ActionKind.ToggleSwitch => JsonSerializer.Deserialize<ToggleSwitchAction>(rootElement, options),
+                    ActionKind.SetSwitchState => JsonSerializer.Deserialize<SetSwitchStateAction>(rootElement, options),
                     _ => throw new JsonException($"Action kind '{kind}' is not currently supported"),
                 };
             }

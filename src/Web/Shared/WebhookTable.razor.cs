@@ -115,6 +115,17 @@ public partial class WebhookTable
 
             return $"Toggle switch '{targetDeviceFriendlyName}'";
         }
+        else if (action is SetSwitchStateAction setSwitchStateAction)
+        {
+            if (!this.deviceIdToNameMapping.TryGetValue(
+                setSwitchStateAction.TargetDeviceId,
+                out var targetDeviceFriendlyName))
+            {
+                targetDeviceFriendlyName = setSwitchStateAction.TargetDeviceId;
+            }
+
+            return $"Turn switch '{targetDeviceFriendlyName}' {setSwitchStateAction.State.ToString().ToLower()} ";
+        }
         else
         {
             return EnumUtil<ActionKind>.ToPrettyString(action.ActionKind);
