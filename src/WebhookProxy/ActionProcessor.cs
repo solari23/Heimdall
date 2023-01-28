@@ -37,6 +37,10 @@ public class ActionProcessor
             {
                 tasks.Add(this.ExecuteSetSwitchStateActionAsync(setSwitchStateAction));
             }
+            else if (action is PublishEventAction publishEventAction)
+            {
+                tasks.Add(this.ExecutePublishEventActionAsync(publishEventAction));
+            }
             else
             {
                 throw new NotImplementedException($"Action of type '{action.GetType().Name}' is not implemented");
@@ -58,6 +62,24 @@ public class ActionProcessor
             new SetSwitchStateRequest
             {
                 State = action.State,
+            },
+            options: JsonHelpers.DefaultJsonOptions);
+    }
+
+    private async Task ExecutePublishEventActionAsync(PublishEventAction action)
+    {
+        await this.ApiClient.PostAsJsonAsync<PublishEventRequest>(
+            "api/events",
+            new PublishEventRequest
+            {
+                Category = action.Category,
+                EventType = action.EventType,
+                MessageTemplate = action.MessageTemplate,
+
+                // TODO: Pass along message template parameters to the backend API.
+                //       Need to extract parameters from the MessageTemplate and
+                //       check what headers/QS parameters to send along.
+                TemplateParameters = new Dictionary<string, string>(),
             },
             options: JsonHelpers.DefaultJsonOptions);
     }

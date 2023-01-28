@@ -1,6 +1,7 @@
 ﻿@page "/webhookadmin"
 @using Heimdall.Models
 @using Heimdall.Models.Dto
+@using Heimdall.Models.Events
 @using Heimdall.Models.Webhooks
 
 <h1 class="mb-4">Manage Webhooks</h1>
@@ -109,7 +110,7 @@
                                 else if (currentAction is SetSwitchStateAction setSwitchStateAction)
                                 {
                                     <div class="form-floating row mb-4">
-                                        <DevicePicker id='@($"ts_action_{currentIndex}_sid")'
+                                        <DevicePicker id='@($"ss_action_{currentIndex}_sid")'
                                                       class="form-control"
                                                       placeholder="Choose Switch"
                                                       DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug })"
@@ -120,12 +121,41 @@
                                     <div class="form-floating row mb-4">
                                         <EnumValuePicker TEnum=SwitchState
                                                          ExcludeValues='new[]{ SwitchState.Unknown }'
-                                                         id='@($"ts_action_{currentIndex}_ss")'
+                                                         id='@($"ss_action_{currentIndex}_ss")'
                                                          class="form-select"
                                                          placeholder="Switch State"
                                                          @bind-Value="setSwitchStateAction.State" />
                                         <label for="ts_action_@(currentIndex)_ss">Switch State</label>
                                         <ValidationMessage For="@(() => setSwitchStateAction.State)" />
+                                    </div>
+                                }
+                                else if (currentAction is PublishEventAction publishEventAction)
+                                {
+                                    <div class="form-floating row mb-4">
+                                        <EnumValuePicker TEnum=HeimdallEventCategory
+                                                         ExcludeValues='new[]{ HeimdallEventCategory.Unknown }'
+                                                         id='@($"pe_action_{currentIndex}_ecat")'
+                                                         class="form-select"
+                                                         placeholder="Event Category"
+                                                         @bind-Value="publishEventAction.Category" />
+                                        <label for="pe_action_@(currentIndex)_ecat">Event Category</label>
+                                        <ValidationMessage For="@(() => publishEventAction.Category)" />
+                                    </div>
+                                    <div class="form-floating row mb-4">
+                                        <InputText id='@($"pe_action_{currentIndex}_et")'
+                                                   class="form-control"
+                                                   placeholder="Event Type"
+                                                   @bind-Value="publishEventAction.EventType" />
+                                        <label for="pe_action_@(currentIndex)_et">Event Type</label>
+                                        <ValidationMessage For="@(() => publishEventAction.EventType)" />
+                                    </div>
+                                    <div class="form-floating row mb-4">
+                                        <InputText id='@($"pe_action_{currentIndex}_mt")'
+                                                   class="form-control"
+                                                   placeholder="Message (Template)"
+                                                   @bind-Value="publishEventAction.MessageTemplate" />
+                                        <label for="pe_action_@(currentIndex)_mt">Message (Template)</label>
+                                        <ValidationMessage For="@(() => publishEventAction.MessageTemplate)" />
                                     </div>
                                 }
                                 else

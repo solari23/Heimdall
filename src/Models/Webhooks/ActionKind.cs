@@ -7,4 +7,5 @@ public enum ActionKind
 {
     ToggleSwitch = 0,
     SetSwitchState = 1,
+    PublishEvent = 2,
 }

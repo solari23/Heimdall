@@ -126,6 +126,10 @@ public partial class WebhookTable
 
             return $"Turn switch '{targetDeviceFriendlyName}' {setSwitchStateAction.State.ToString().ToLower()} ";
         }
+        else if (action is PublishEventAction publishEventAction)
+        {
+            return $"Publish {publishEventAction.Category.ToString().ToLower()} event of type '{publishEventAction.EventType}'";
+        }
         else
         {
             return EnumUtil<ActionKind>.ToPrettyString(action.ActionKind);
