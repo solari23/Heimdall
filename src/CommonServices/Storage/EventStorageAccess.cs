@@ -73,7 +73,7 @@ public class EventStorageAccess : SqliteStorageAccess, IEventStorageAccess
 
         if (!string.IsNullOrEmpty(eventType))
         {
-            query += $" AND Type = ${nameof(eventType)}";
+            query += $" AND EventType = ${nameof(eventType)}";
             parameters.Add((nameof(eventType), eventType));
         }
 
