@@ -8,6 +8,7 @@ public class SqliteStorageAccessOptions
     public static class Instances
     {
         public const string Main = nameof(Main);
+        public const string Event = nameof(Event);
     }
 
     public string DatabaseFilePath { get; set; }

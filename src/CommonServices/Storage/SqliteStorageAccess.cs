@@ -41,7 +41,7 @@ public abstract class SqliteStorageAccess : IDisposable
         string query,
         Func<SqliteDataReader, T> objectReader,
         CancellationToken ct,
-        params (string Key, string Value)[] parameters)
+        params (string Key, object Value)[] parameters)
     {
         var objects = new List<T>();
 

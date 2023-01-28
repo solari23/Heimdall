@@ -18,6 +18,9 @@
   "SqliteStorageAccess": {
     "Main": {
       "DatabaseFilePath": "/home/heimdall/storage/Heimdall.db"
+    },
+    "Event": {
+      "DatabaseFilePath": "/home/heimdall/storage/HeimdallEvents.db"
     }
   },
   "HeimdallSecretKeyFile": "/home/heimdall/storage/SecretKey",

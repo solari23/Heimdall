@@ -81,6 +81,11 @@ public static class Program
             builder.Configuration.GetSection("SqliteStorageAccess:Main"));
         builder.Services.AddSingleton<IMainStorageAccess, MainStorageAccess>();
 
+        builder.Services.Configure<SqliteStorageAccessOptions>(
+            SqliteStorageAccessOptions.Instances.Event,
+            builder.Configuration.GetSection("SqliteStorageAccess:Event"));
+        builder.Services.AddSingleton<IEventStorageAccess, EventStorageAccess>();
+
         builder.Services.AddSingleton<ShellyClient>();
         builder.Services.AddTransient<IDeviceControllerFactory, DeviceControllerFactory>();
 

@@ -2,6 +2,9 @@
   "SqliteStorageAccess": {
     "Main": {
       "DatabaseFilePath": "../DevData/Heimdall.ignore"
+    },
+    "Event": {
+      "DatabaseFilePath": "../DevData/HeimdallEvents.ignore"
     }
   },
   "HeimdallSecretKeyFile": "../DevData/SecretKey.ignore",
