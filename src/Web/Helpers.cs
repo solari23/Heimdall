@@ -4,6 +4,7 @@
 using System.Security.Claims;
 
 using Heimdall.Models;
+using Heimdall.Web.Shared;
 using Microsoft.JSInterop;
 
 namespace Heimdall.Web;

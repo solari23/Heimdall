@@ -1,0 +1,36 @@
+﻿@using Microsoft.AspNetCore.Components.QuickGrid
+
+<div class="card">
+    <h5 class="card-header text-white bg-primary justify-content-between d-flex align-items-center">
+        @Title
+        <button type="button"
+                class="btn btn-sm btn-primary oi oi-reload"
+                aria-label="Reload"
+                title="Reload"
+                @onclick=@(() => this.ReloadAsync()) />
+    </h5>
+    <div class="card-body">
+        @if (this.Events is null)
+        {
+            <div class="spinner-border" role="status" />
+        }
+        else
+        {
+            <QuickGrid Items="@this.Events">
+                <PropertyColumn Property="@(e => e.TimeUtc)"
+                                Sortable="true"
+                                IsDefaultSort=SortDirection.Descending
+                                Format="ddd, dd MMM yyyy hh:mm tt"
+                                Title="Time (Local)" />
+
+                @if (this.CategoryFilter is null)
+                {
+                    <PropertyColumn Property="@(e => e.Category)" Sortable="true" Title="Category" />
+                }
+
+                <PropertyColumn Property="@(e => e.EventType)" Sortable="true" Title="Event Type" />
+                <PropertyColumn Property="@(e => e.Message)" Title="Message" />
+            </QuickGrid>
+        }
+    </div>
+</div>
