@@ -12,4 +12,9 @@ public enum DeviceType
     /// https://www.shelly.cloud/en-us/products/product-overview/shelly-plus-plug-us-1
     /// </summary>
     ShellyPlug,
+
+    /// <summary>
+    /// The device is a smart plug flashed with Tasmota firmware.
+    /// </summary>
+    TasmotaPlug,
 }

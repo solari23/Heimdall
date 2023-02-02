@@ -101,7 +101,7 @@
                                         <DevicePicker id='@($"ts_action_{currentIndex}_sid")'
                                                       class="form-control"
                                                       placeholder="Choose Switch"
-                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug })"
+                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug, DeviceType.TasmotaPlug })"
                                                       @bind-Value="toggleSwitchAction.TargetDeviceId"/>
                                         <label for="ts_action_@(currentIndex)_sid">Choose Switch</label>
                                         <ValidationMessage For="@(() => toggleSwitchAction.TargetDeviceId)" />
@@ -113,7 +113,7 @@
                                         <DevicePicker id='@($"ss_action_{currentIndex}_sid")'
                                                       class="form-control"
                                                       placeholder="Choose Switch"
-                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug })"
+                                                      DeviceTypeFilter="@(new[]{ DeviceType.ShellyPlug, DeviceType.TasmotaPlug })"
                                                       @bind-Value="setSwitchStateAction.TargetDeviceId"/>
                                         <label for="ts_action_@(currentIndex)_sid">Choose Switch</label>
                                         <ValidationMessage For="@(() => setSwitchStateAction.TargetDeviceId)" />

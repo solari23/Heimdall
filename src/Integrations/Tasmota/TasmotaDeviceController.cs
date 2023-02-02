@@ -4,11 +4,11 @@
 using Heimdall.Models;
 using Heimdall.Models.Dto;
 
-namespace Heimdall.Integrations.Shelly;
+namespace Heimdall.Integrations.Tasmota;
 
-public class ShellyDeviceController : ISwitchController
+public class TasmotaDeviceController : ISwitchController
 {
-    internal ShellyDeviceController(Device deviceInfo, ShellyClient client)
+    internal TasmotaDeviceController(Device deviceInfo, TasmotaClient client)
     {
         this.DeviceInfo = deviceInfo;
         this.Client = client;
@@ -16,12 +16,14 @@ public class ShellyDeviceController : ISwitchController
 
     private Device DeviceInfo { get; }
 
-    private ShellyClient Client { get; }
+    private TasmotaClient Client { get; }
 
     public async Task<SwitchState> GetCurrentStateAsync(CancellationToken ct = default)
     {
         var currentStatus = await this.Client.GetSwitchStatusAsync(this.GetDeviceUri(), ct);
-        return currentStatus.IsOn ? SwitchState.On : SwitchState.Off;
+        return currentStatus.Power.Equals(PowerStateResponse.PowerStateOn, StringComparison.OrdinalIgnoreCase)
+            ? SwitchState.On
+            : SwitchState.Off;
     }
 
     public async Task TurnOnAsync(CancellationToken ct = default)

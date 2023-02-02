@@ -35,7 +35,9 @@ public class SwitchesController : Controller
     [HeimdallRoleAuthorize(HeimdallRole.HomeViewer)]
     public async Task<IActionResult> ListAllAsync()
     {
-        var queryResult = await this.MainStorage.GetDevicesAsync(DeviceType.ShellyPlug);
+        var queryResult = await this.MainStorage.GetDevicesAsync(
+            DeviceType.ShellyPlug,
+            DeviceType.TasmotaPlug);
 
         var switches = queryResult.WasFound
             ? queryResult.Data.Select(d =>

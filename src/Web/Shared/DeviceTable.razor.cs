@@ -65,6 +65,7 @@ public partial class DeviceTable
         {
             DeviceType.Unknown => "oi-question-mark",
             DeviceType.ShellyPlug => "oi-pulse",
+            DeviceType.TasmotaPlug => "oi-pulse",
             _ => "oi-question-mark",
         };
 }

@@ -8,6 +8,7 @@ using Heimdall.CommonServices.Security;
 using Heimdall.CommonServices.Storage;
 using Heimdall.Integrations;
 using Heimdall.Integrations.Shelly;
+using Heimdall.Integrations.Tasmota;
 using Heimdall.Server.Security;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -87,6 +88,7 @@ public static class Program
         builder.Services.AddSingleton<IEventStorageAccess, EventStorageAccess>();
 
         builder.Services.AddSingleton<ShellyClient>();
+        builder.Services.AddSingleton<TasmotaClient>();
         builder.Services.AddTransient<IDeviceControllerFactory, DeviceControllerFactory>();
 
         builder.Services.AddControllers()
